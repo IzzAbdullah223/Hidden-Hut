@@ -1,5 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv';
+import './config/passport.js'
+
 dotenv.config();
 const app = express()
 
