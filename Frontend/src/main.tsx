@@ -1,10 +1,20 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { createBrowserRouter,RouterProvider,Navigate } from 'react-router'
 import './index.css'
-import App from './App.tsx'
+import { Form } from './components/auth/Form'
+
+const router = createBrowserRouter([
+  {path:'/',
+    element:<Navigate to={'/signup'}/>
+  },
+  {path:'/:form',
+    element:<Form/>
+  }
+])
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+      <RouterProvider router={router}/>
   </StrictMode>,
 )
