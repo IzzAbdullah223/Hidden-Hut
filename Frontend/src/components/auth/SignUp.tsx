@@ -19,7 +19,7 @@ export function SignUp(){
      })
 
      const onSubmit = async(data:TSignUpSchema)=>{
-     
+        
         reset()
      }
  
