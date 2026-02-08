@@ -1,13 +1,17 @@
 import express from 'express'
 import dotenv from 'dotenv';
 import './config/passport.js'
+import cors from 'cors'
+import { authRouter } from './routes/auth.js';
+
 
 dotenv.config();
 const app = express()
 
-app.get('/',(req,res)=>{
-    res.send("Hello world")
-})
+
+app.use(cors())
+app.use(express.json())
+app.use('/',authRouter)
 
 const PORT = process.env.PORT || 3000
 

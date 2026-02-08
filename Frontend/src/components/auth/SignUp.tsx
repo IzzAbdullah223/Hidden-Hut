@@ -1,4 +1,4 @@
-
+import { signUp } from '../../services/authServices'
 import logo from '../../assets/logo.jpg'
 import { Link } from "react-router"
 import { type TSignUpSchema, signUpSchema } from '../../lib/types'
@@ -19,8 +19,9 @@ export function SignUp(){
      })
 
      const onSubmit = async(data:TSignUpSchema)=>{
-        
-        reset()
+         await signUp(data)
+         reset()
+ 
      }
  
     

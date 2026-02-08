@@ -5,7 +5,7 @@ export function Form(){
 
     const{form} = useParams()
 
-    console.log(form)
+    //console.log(form)
 
     if(form==='login')
     return <SignUp/>
