@@ -14,14 +14,56 @@ export function SignUp(){
         handleSubmit,
         formState: {errors,isSubmitting},
         reset,
+        setError,
      } = useForm<TSignUpSchema>({
-        resolver:zodResolver(signUpSchema)
+        resolver: zodResolver(signUpSchema) 
      })
 
      const onSubmit = async(data:TSignUpSchema)=>{
-         await signUp(data)
-         reset()
+         const responseData = await signUp(data)
+
  
+
+         if(responseData.errors){
+            const errors = responseData.errors;
+
+            if(errors.fName){
+               setError("fName",{
+                  type:"server",
+                  message: errors.fName
+               })
+            }
+             if(errors.lName){
+               setError("lName",{
+                  type:"server",
+                  message: errors.lName
+               })
+            }
+             if(errors.email){
+               setError("email",{
+                  type:"server",
+                  message: errors.email
+               })
+            }
+             if(errors.password){
+               setError("password",{
+                  type:"server",
+                  message: errors.password
+               })
+            }
+             if(errors.confirmPassword){
+               setError("confirmPassword",{
+                  type:"server",
+                  message: errors.confirmPassword
+               })
+            }
+         }
+
+
+         if(responseData.success)
+            reset()
+
+      
      }
  
     
