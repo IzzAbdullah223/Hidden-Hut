@@ -1,14 +1,12 @@
-import  {type TSignUpSchema}  from "../lib/types"
+import { type TSignUpSchema, type TLogInSchema } from '../lib/types';
+
  
 
 export async function signUp(data:TSignUpSchema){
      const response = await fetch('http://localhost:3000/signup',{
         method:"POST",
         headers:{'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            ...data,
-            confirmPassword:120222
-        })
+        body: JSON.stringify(data)
      })
 
      const responseData =  await response.json()
@@ -19,4 +17,20 @@ export async function signUp(data:TSignUpSchema){
 
      return {success:true}
          
+}
+
+export async function logIn(data:TLogInSchema){
+    const response = await fetch('http://localhost:3000/login',{
+        method:"POST",
+        headers:{'content-Type': 'application/json'},
+        body:JSON.stringify(data)
+    })
+
+    const responseData = await response.json()
+    
+    if(!response.ok){
+        return {sucess:false, errors:responseData.errors}
+    }
+
+    return {sucess:true}
 }

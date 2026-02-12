@@ -1,15 +1,16 @@
 import { SignUp } from "./SignUp"
-//import { LogIn } from "./LogIn"
+import { LogIn } from "./LogIn"
 import { useParams } from "react-router"
 export function Form(){
 
     const{form} = useParams()
 
-    //console.log(form)
 
-    if(form==='login')
+    if(form==='login'){
+         return <LogIn/>
+    }
     return <SignUp/>
     
-    return <SignUp/>
+
     
 }
