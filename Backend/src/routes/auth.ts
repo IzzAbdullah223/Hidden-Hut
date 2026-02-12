@@ -6,5 +6,4 @@ export const authRouter = Router()
 
 
 authRouter.post("/signup",signUpPost)
-authRouter.post('/login',logInPost)
-//authRouter.post('/Login',passport.authenticate("local",{session:false}))
+authRouter.post('/login',passport.authenticate("local",{session:false}),logInPost)

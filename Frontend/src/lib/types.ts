@@ -19,7 +19,7 @@ export type TSignUpSchema = z.infer<typeof signUpSchema>
 
 export const logInSchema = z.object({
     email: z.string().email("Please enter a valid email"),
-    password: z.string().min(1,"Password should be atleast 5 characters")
+    password: z.string().min(5,"Password should be atleast 5 characters")
 })
 
 export type TLogInSchema = z.infer<typeof logInSchema>

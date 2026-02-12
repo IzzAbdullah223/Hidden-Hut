@@ -1,41 +1,40 @@
 import { type TLogInSchema, logInSchema } from '../../lib/types';
 import logo from '../../assets/logo.jpg'
-import { Link } from "react-router"
+import { Link,useNavigate } from "react-router"
 import {useForm} from 'react-hook-form'
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { logIn } from '../../services/authServices';
 
 
 export function LogIn(){
 
+       const navigate = useNavigate()
+      const[error,setError ]= useState(false)
     const{
         register,
         handleSubmit,
         formState: {errors,isSubmitting},
         reset,
-        setError,
     } = useForm<TLogInSchema>({
         resolver:zodResolver(logInSchema)
     })
 
-    const onSubmit = async (data:TLogInSchema)=>{
-         const responseData = await logIn(data)
-        
-         if(responseData.errors){
-            const errors = responseData.errors
-            if(errors.email){
-                setError('email',{
-                    type:"server",
-                    message:errors.email
-                })
-            }
-            if(errors.password){
-                setError('password',{
-                    type:"server",
-                    message:errors.email
-                })
-            }
+    const onSubmit =async (data:TLogInSchema)=>{
+        setError(false)
+         const response = await logIn(data)
+      
+         if(response.status===401){
+            setError(true)
+            reset()
          }
+
+        if(response.status===200){
+            navigate('/gl   obal')
+        }
+
+         
+
          
     }
 
@@ -47,10 +46,10 @@ export function LogIn(){
                         <img src={logo} className='w-16 h-16 rounded-2xl'/>
                         <h1 className='text-2xl sm:text-3xl font-extrabold text-white  '>Hidden Hut App</h1>
                     </div>
-                    <h2 className='text-4xl sm:text-5xl font-bold text-white'>Sign up</h2>
+                    <h2 className='text-4xl sm:text-5xl font-bold text-white'>Welcome back</h2>
                     <p className='text-[16px] sm:text-lg text-neutral-400 font'>
-                        Already have an account?
-                        <Link to={'/signup'} className='text-white font-bold'> Login</Link>
+                        Don't have an account?
+                        <Link to={'/signup'} className='text-white font-bold'> Create one</Link>
                     </p>
 
                     <form onSubmit={handleSubmit(onSubmit)}  className='flex flex-col gap-4 w-full min-[500px]:w-110'>
@@ -63,7 +62,7 @@ export function LogIn(){
                          type='text' 
                          placeholder='Enter your email'/>
                          {errors.email &&(
-                            <p className='text-red-500 -mt-1'>{`${errors.email.message}`}</p>
+                            <p className='text-red-500 -mt-1 '>{`${errors.email.message}`}</p>
                          )}
                       </div>
 
@@ -72,12 +71,12 @@ export function LogIn(){
                         <input
                          {...register("password")}
                          className='bg-white pl-2 py-1.75 rounded focus:outline-none text-neutral-800' 
-                         type='text' />
+                         type='password' />
                          {errors.password &&(
                             <p className='text-red-500 -mt-1'>{`${errors.password.message}`}</p>
                          )}
                       </div>
- 
+                        <p className='text-red-500 -mt-1 -mb-4'>{`${error? "Invalid email or password": ""}`}</p>
                           <button
                           disabled={isSubmitting}
                            className='bg-black text-white font-bold p-3 rounded-md cursor-pointer'>
