@@ -5,7 +5,7 @@ import './index.css'
 import { LogIn } from './components/auth/LogIn'
 import { SignUp } from './components/auth/SignUp'
 import { Layout } from './components/layout/Layout'
-import { Global } from './components/pages/global'
+import { Global } from './components/pages/Global'
 
 export const router = createBrowserRouter([
   {

@@ -14,7 +14,7 @@ model User{
   password String
   firstName String
   lastName String
-  pictureURL String
+  pictureURL String @default("https://res.cloudinary.com/dic5sskvu/image/upload/v1771032844/defaultAvatar_szkhjs.webp")
   messages Message[]
 }
 

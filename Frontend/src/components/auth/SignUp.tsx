@@ -67,7 +67,7 @@ export function SignUp(){
     
     return(
         <main className='min-h-screen flex  justify-center items-center bg-[#1c1e21]'>
-            <div className='h-[100vh] p-5'>  
+            <div className='h-screen p-5'>  
                 <div className='bg-[#242526] flex flex-col gap-4 p-6 rounded-lg ring-1 ring-gray-50/15'>
                     <div className='flex items-center gap-4 mb-0 mt-3'> 
                         <img src={logo} className='w-16 h-16 rounded-2xl'/>
