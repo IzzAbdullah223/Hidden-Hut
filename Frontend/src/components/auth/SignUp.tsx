@@ -62,8 +62,6 @@ export function SignUp(){
 
          if(responseData.success)
             reset()
-
-      
      }
  
     

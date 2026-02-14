@@ -28,7 +28,9 @@ export async function logIn(data:TLogInSchema){
             password: data.password
         })
     })
-    return response
+    return response;
+   
+ 
 
     
  

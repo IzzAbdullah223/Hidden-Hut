@@ -23,3 +23,11 @@ export const logInSchema = z.object({
 })
 
 export type TLogInSchema = z.infer<typeof logInSchema>
+
+export type TLogInResponse={
+    token:string
+}
+
+export type HeaderProps ={
+    name:string
+}

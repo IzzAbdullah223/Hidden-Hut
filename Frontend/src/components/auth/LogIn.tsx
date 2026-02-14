@@ -1,4 +1,4 @@
-import { type TLogInSchema, logInSchema } from '../../lib/types';
+import { type TLogInSchema, logInSchema, type TLogInResponse } from '../../lib/types';
 import logo from '../../assets/logo.jpg'
 import { Link,useNavigate } from "react-router"
 import {useForm} from 'react-hook-form'
@@ -30,12 +30,11 @@ export function LogIn(){
          }
 
         if(response.status===200){
-            navigate('/gl   obal')
+            const data: TLogInResponse = await response.json()
+            //const token = data.token
+          //  localStorage.setItem('token',token)
+            navigate('/global')
         }
-
-         
-
-         
     }
 
     return(
@@ -76,7 +75,7 @@ export function LogIn(){
                             <p className='text-red-500 -mt-1'>{`${errors.password.message}`}</p>
                          )}
                       </div>
-                        <p className='text-red-500 -mt-1 -mb-4'>{`${error? "Invalid email or password": ""}`}</p>
+                        <p className='text-red-500 -mt-1 -mb-2'>{`${error? "Invalid email or password": ""}`}</p>
                           <button
                           disabled={isSubmitting}
                            className='bg-black text-white font-bold p-3 rounded-md cursor-pointer'>

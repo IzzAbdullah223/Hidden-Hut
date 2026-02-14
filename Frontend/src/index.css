@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+.bg-dark{
+    --tw-bg-opacity:1;
+    background-color: rgb(28 30 33/ var(--tw-bg-opacity));
+}
+
+.bg-dark-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(36 37 38 / var(--tw-bg-opacity));
+}
+
+.text-dark-500 {
+  --tw-text-opacity: 1;
+  color: rgb(188 192 196 / var(--tw-text-opacity));
+}
