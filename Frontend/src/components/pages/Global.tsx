@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { fetchMessages } from "../../services/messagesServices"
+import Logo from '../assets/logo.jpg'
 export function Global(){
 
    useEffect(()=>{
@@ -13,6 +14,10 @@ export function Global(){
       console.log(response)
    }
     return(<div className="bg-dark-100">
+             <div className="flex items-center gap-2 bg-dark-100 p-2">
+            <img className="size-10  rounded-full" src={Logo}/>
+            <p className=" text-lg capitalize text-white">Global Chat</p>
+        </div>
              <p className="text-dark-500 text text-xs text-center">01/06/2026</p>
              <div>
                  
