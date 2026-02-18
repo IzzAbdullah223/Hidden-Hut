@@ -4,7 +4,6 @@ import { createBrowserRouter,RouterProvider,Navigate } from 'react-router'
 import './index.css'
 import { LogIn } from './components/auth/LogIn'
 import { SignUp } from './components/auth/SignUp'
-import { Layout } from './components/layout/Layout'
 import { Global } from './components/pages/Global'
 
 export const router = createBrowserRouter([
@@ -21,13 +20,8 @@ export const router = createBrowserRouter([
     element: <LogIn />,
   },
   {
-    element: <Layout/>,
-    children:[
-      {
-        path:"/global",
-        element:<Global/>
-      }
-    ]
+   path:"/global",
+   element:<Global />
   }
 
 ]);
