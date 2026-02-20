@@ -1,12 +1,47 @@
 import {type Request, type Response} from 'express'
+import * as db from '../db/queries.js'
+ 
+ 
 
-export function getMessages(req:Request,res:Response){
-    console.log("Hello I am message get ")
-    return res.status(200).json({
-        sucess:true
-    })
+export async  function getMessages(req:Request,res:Response){
+
+    try{
+        const messages = await db.fetchMessages()
+        return res.status(200).json(messages)
+    }catch(err){
+        return res.status(500).json({
+            message:"Failed to retrive messages"
+        })
+    }
+      
+
+      
 }
 
-export function postMessage(req:Request,res:Response){
-    console.log("Hello I am message post ")
+export async function postMessage(req:Request,res:Response){
+ 
+    if(!req.user){
+       return res.status(401).json({
+            message:false
+        })
+    }
+    const message = req.body.message as string
+    const senderId = req.user.id
+    if(!message.trim()){
+        return res.status(400).json({
+            message:"Message cannot be empty"
+        })
+    }
+    try{
+        await db.postMessage(senderId,message)
+        return res.status(201).json({
+            message:true
+        })
+    }catch(err){
+        return res.status(500).json({
+            message:false
+        })
+    }
+     
+    
 }

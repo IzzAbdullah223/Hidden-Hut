@@ -30,9 +30,10 @@ export function LogIn(){
          }
 
         if(response.status===200){
-            //const data: TLogInResponse = await response.json()
-            //const token = data.token
-          //  localStorage.setItem('token',token)
+            const data: TLogInResponse = await response.json()
+            const token = data.token
+            localStorage.setItem('token',token)
+            localStorage.setItem('currentUserId',String(data.currentUserId))
             navigate('/global')
         }
     }

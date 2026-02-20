@@ -12,22 +12,31 @@ export const signUpSchema = z.object({
     path: ["confirmPassword"]
 })
 
-
-export type TSignUpSchema = z.infer<typeof signUpSchema>
-
-
-
 export const logInSchema = z.object({
     email: z.string().email("Please enter a valid email"),
     password: z.string().min(5,"Password should be atleast 5 characters")
 })
 
+
+export type TSignUpSchema = z.infer<typeof signUpSchema>
+
+
 export type TLogInSchema = z.infer<typeof logInSchema>
 
 export type TLogInResponse={
-    token:string
+    token:string,
+    currentUserId:number
 }
 
-export type HeaderProps ={
-    name:string
+export type Messages={
+    content:string
+    date:string
+    senderId:number
+    sender:{
+        firstName:string,
+        lastName:string,
+        pictureURL:string,
+    }
 }
+
+ 

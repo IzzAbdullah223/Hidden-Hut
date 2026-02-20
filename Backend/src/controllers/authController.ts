@@ -16,7 +16,9 @@ declare global{
 interface TokenPayload {
     user: {
         id: number
-        email: string
+        email: string,
+        fName:string,
+        lname:string
     }
 }
 
@@ -52,7 +54,8 @@ export async function logInPost(req:Request,res:Response){
         const user=req.user
         jwt.sign({user:user},process.env.SECRET_KEY as Secret,{expiresIn: '24h'},(err: Error | null, token: string | undefined)=>{
           res.json({
-                token
+                token:token,
+                currentUserId:user?.id
           })
         })
 

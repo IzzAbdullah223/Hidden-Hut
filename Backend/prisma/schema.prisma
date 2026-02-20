@@ -25,12 +25,13 @@ model Message{
   imageUrl String?
   sender User @relation(fields:[senderId],references: [id])
   senderId Int
-  global Global @relation(fields:[globalId],references: [id])
-  globalId Int
+  type Type
 }
 
-model Global{
-id Int @id @default(autoincrement())
-messages Message[]
-}
 
+enum Type{
+  GLOBAL
+  DIRECTED
+  GROUP
+}
+ 
