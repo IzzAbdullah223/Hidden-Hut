@@ -27,6 +27,7 @@ export async function fetchMessages(){
     const globalMessages = await prisma.message.findMany({
         where: {type: "GLOBAL"},
         select:{
+            id:true,
             date:true,
             content:true,
             senderId:true,

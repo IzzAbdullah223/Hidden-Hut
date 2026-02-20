@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react"
+import { useEffect,useState,useRef } from "react"
 import { fetchMessages,sendMessage } from "../../services/messagesServices"
 import Logo from '../../assets/logo.jpg'
 import image from '../../assets/image.svg'
@@ -13,30 +13,54 @@ export function Global(){
    const [message,setMessage]=useState("")
    const [isSubmitting, setIsSubmitting] = useState(false)
    const [data,setData]= useState<Messages[]>([])
+   const [showDeleteId,setShowDeleteId]= useState<number | null>(null)
 
    const handleMessageInput =(event:React.ChangeEvent<HTMLTextAreaElement>)=>{
       setMessage(event.target.value)
+   }
+
+   const handleDelete=(messageId:number)=>{
+      setShowDeleteId(showDeleteId === messageId ? null : messageId)
    }
 
    const handleSubmit = async (event:React.SyntheticEvent)=>{
       console.log(token)
       console.log(currentUserId)
       event.preventDefault()
-      if(!message.trim())
+      if(!message.trim()){
          return
-
+      }
+          
       setIsSubmitting(true)
       
       await sendMessage(message) //there should be response here but oh well 
       
       setIsSubmitting(false)
       setMessage('')
-      
    }
+
+   useEffect(()=>{
+      const handleClickOutside = (event:MouseEvent)=>{
+         const target = event.target as HTMLElement
+         
+         if(!target.closest('.message-menu')){
+            setShowDeleteId(null)
+         }
+      }
+
+      document.addEventListener('mousedown',handleClickOutside)
+
+      return () =>{
+         document.removeEventListener('mousedown',handleClickOutside)
+      }
+   },[])
+ 
 
    useEffect(()=>{
       Messages()
    },[])
+
+ 
 
 
    async function Messages(){
@@ -69,17 +93,20 @@ export function Global(){
                   </div>
                 </div>
 
-{data.map((message, index) => (
+{data.map((message) => (
    message.senderId === currentUserId ? (
     // user message stlye 
      
-      <div className="flex justify-end items-center gap-2 ">
-         <img className="size-6" src={threeDots}/>
+      <div className="flex justify-end items-center gap-2 relative message-menu" key={message.id}>
+         <div className="cursor-pointer" onClick={()=>handleDelete(message.id)}  > 
+         <img className="size-5" src={threeDots}/>
+         </div>
+         {showDeleteId ===message.id && (<p className=" absolute top-full mt-1 left-0 z-10 py-2 px-4  rounded-md cursor-pointer  bg-dark-200 text-white">Delete</p> )}
         <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl">{message.content}</p>
       </div>
   ) : (
     //  messages tyle for other people 
-    <div className="flex gap-4" key={index}>
+    <div className="flex gap-4" key={message.id}>
       <img className="size-8 rounded-full self-end" src={message.sender.pictureURL}/>
       <div className="flex flex-col gap-2">
         <p className="text-dark-500 text-xs ml-3">@{message.sender.firstName}</p>

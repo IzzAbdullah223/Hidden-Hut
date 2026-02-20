@@ -29,6 +29,7 @@ export type TLogInResponse={
 }
 
 export type Messages={
+    id:number
     content:string
     date:string
     senderId:number
