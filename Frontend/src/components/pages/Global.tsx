@@ -1,4 +1,4 @@
-import { useEffect,useState,useRef } from "react"
+import { useEffect,useState} from "react"
 import { fetchMessages,sendMessage } from "../../services/messagesServices"
 import Logo from '../../assets/logo.jpg'
 import image from '../../assets/image.svg'
@@ -97,11 +97,12 @@ export function Global(){
    message.senderId === currentUserId ? (
     // user message stlye 
      
-      <div className="flex justify-end items-center gap-2 relative message-menu" key={message.id}>
-         <div className="cursor-pointer" onClick={()=>handleDelete(message.id)}  > 
+      <div className="flex justify-end items-center gap-2   message-menu" key={message.id}>
+         <div className="cursor-pointer relative" onClick={()=>handleDelete(message.id)}  > 
          <img className="size-5" src={threeDots}/>
+         {showDeleteId ===message.id && (<p className=" absolute top-full mt-3 -right-10 z-10 py-2 px-4  rounded-md cursor-pointer  bg-dark-200 text-white">Delete</p> )}
          </div>
-         {showDeleteId ===message.id && (<p className=" absolute top-full mt-1 left-0 z-10 py-2 px-4  rounded-md cursor-pointer  bg-dark-200 text-white">Delete</p> )}
+          
         <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl">{message.content}</p>
       </div>
   ) : (
