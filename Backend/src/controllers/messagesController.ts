@@ -42,6 +42,18 @@ export async function postMessage(req:Request,res:Response){
             message:false
         })
     }
-     
-    
+}
+
+export async function deleteMessage(req:Request,res:Response){
+    const messageId = req.body.messageId as number
+    try{
+        await db.deleteMessage(messageId)
+        res.status(200).json({
+            sucess:true
+        })
+    }catch(err){
+        res.status(500).json({
+            sucess:false
+        })
+    }
 }

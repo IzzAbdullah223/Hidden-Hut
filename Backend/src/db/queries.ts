@@ -56,4 +56,12 @@ export async function postMessage(Id:number,message:string){
   
 }
 
+export async function deleteMessage(Id:number){
+    await prisma.message.delete({
+        where:{
+            id:Id
+        }
+    })
+}
+
 

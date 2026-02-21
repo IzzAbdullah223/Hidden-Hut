@@ -1,5 +1,5 @@
 import { useEffect,useState} from "react"
-import { fetchMessages,sendMessage } from "../../services/messagesServices"
+import { fetchMessages,sendMessage,deleteMessage } from "../../services/messagesServices"
 import Logo from '../../assets/logo.jpg'
 import image from '../../assets/image.svg'
 import send from '../../assets/send.svg'
@@ -14,13 +14,19 @@ export function Global(){
    const [isSubmitting, setIsSubmitting] = useState(false)
    const [data,setData]= useState<Messages[]>([])
    const [showDeleteId,setShowDeleteId]= useState<number | null>(null)
+   const [refreshTrigger,setRefreshTrigger] = useState(0)
 
    const handleMessageInput =(event:React.ChangeEvent<HTMLTextAreaElement>)=>{
       setMessage(event.target.value)
-   }
+      }
 
-   const handleDelete=(messageId:number)=>{
-      setShowDeleteId(showDeleteId === messageId ? null : messageId)
+      const toggleDeleteMenu = (messageId: number) => {
+         setShowDeleteId(showDeleteId === messageId ? null : messageId)
+         }
+
+   const handleDelete= async (messageId:number)=>{
+       await deleteMessage(messageId)
+       setRefreshTrigger(prev=>prev+1)
    }
 
    const handleSubmit = async (event:React.SyntheticEvent)=>{
@@ -37,13 +43,14 @@ export function Global(){
       
       setIsSubmitting(false)
       setMessage('')
+      setRefreshTrigger(prev=>prev+1)
    }
 
    useEffect(()=>{
       const handleClickOutside = (event:MouseEvent)=>{
          const target = event.target as HTMLElement
          
-         if(!target.closest('.message-menu')){
+         if(!target.closest('.three-dots-menu')){
             setShowDeleteId(null)
          }
       }
@@ -58,7 +65,7 @@ export function Global(){
 
    useEffect(()=>{
       Messages()
-   },[])
+   },[refreshTrigger])
 
  
 
@@ -93,14 +100,18 @@ export function Global(){
                   </div>
                 </div>
 
-{data.map((message) => (
-   message.senderId === currentUserId ? (
-    // user message stlye 
+               {data.map((message) => (
+               message.senderId === currentUserId ? (
+   
      
-      <div className="flex justify-end items-center gap-2   message-menu" key={message.id}>
-         <div className="cursor-pointer relative" onClick={()=>handleDelete(message.id)}  > 
-         <img className="size-5" src={threeDots}/>
-         {showDeleteId ===message.id && (<p className=" absolute top-full mt-3 -right-10 z-10 py-2 px-4  rounded-md cursor-pointer  bg-dark-200 text-white">Delete</p> )}
+               <div className="flex justify-end items-center gap-2" key={message.id}>
+                  <div className="cursor-pointer relative three-dots-menu" onClick={()=>toggleDeleteMenu(message.id)}  > 
+                  <img className="size-5" src={threeDots}/>
+               <p 
+                  onClick={() => handleDelete(message.id)} 
+                  className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${
+                  showDeleteId === message.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
+               }`}>Delete</p>  
          </div>
           
         <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl">{message.content}</p>
