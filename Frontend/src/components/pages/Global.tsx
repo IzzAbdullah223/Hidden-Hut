@@ -1,5 +1,5 @@
 import { useEffect,useState,useRef} from "react"
-import { fetchMessages,sendMessage,deleteMessage,uploadImage } from "../../services/messagesServices"
+import { fetchMessages,sendMessage,deleteMessage} from "../../services/messagesServices"
 import Logo from '../../assets/logo.jpg'
 import image from '../../assets/image.svg'
 import send from '../../assets/send.svg'
@@ -13,6 +13,7 @@ export function Global(){
    const token = localStorage.getItem('token')
    const currentUserId = Number(localStorage.getItem('currentUserId'))
    const [message,setMessage]=useState("")
+   const [selectedFile, setSelectedFile] = useState<File | null>(null)
    const [isSubmitting, setIsSubmitting] = useState(false)
    const [data,setData]= useState<Messages[]>([])
    const [showDeleteId,setShowDeleteId]= useState<number | null>(null)
@@ -39,11 +40,8 @@ export function Global(){
    const handleFileSelect = async(e:React.ChangeEvent<HTMLInputElement>)=>{
       const file = e.target.files?.[0]
       if(!file) return
-      const formData = new FormData()
-      formData.append('image',file)
-      const response = await uploadImage(formData)
-      console.log(response)
-      
+      setSelectedFile(file)
+       
    }
 
    const handleSubmit = async (event:React.SyntheticEvent)=>{
@@ -53,13 +51,20 @@ export function Global(){
       if(!message.trim()){
          return
       }
+
+      const formData = new FormData()
+      formData.append('message',message)
+      if(selectedFile){
+         formData.append('image',selectedFile)
+      }
           
       setIsSubmitting(true)
       
-      await sendMessage(message) //there should be response here but oh well 
+      await sendMessage(formData) //there should be response here but oh well 
       
       setIsSubmitting(false)
       setMessage('')
+      setSelectedFile(null)
       setRefreshTrigger(prev=>prev+1)
    }
 
@@ -158,7 +163,7 @@ export function Global(){
             <input
             type="file"
             ref={fileInputRef}
-            style={{display:'none'}}
+            className="hidden"
             accept="image/*"
             onChange={handleFileSelect}/>
             <form onSubmit={handleSubmit}  className="flex items-center gap-2 p-2  bg-dark-100">

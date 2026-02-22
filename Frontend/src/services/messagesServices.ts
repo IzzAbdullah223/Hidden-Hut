@@ -7,16 +7,15 @@ export async function fetchMessages(){
     return response
 }
 
-export async function sendMessage(message:string){
+export async function sendMessage(formData:FormData){
     const token  = localStorage.getItem('token')
     const response = await fetch('http://localhost:3000/global/messages',{
         method:"POST",
         headers:{
-            'Content-Type':'application/json',
             'Authorization':`Bearer ${token}`
         },
         body:JSON.stringify({
-            message:message
+            body:formData
         })
     })
     
@@ -38,18 +37,4 @@ export async function deleteMessage(messageId:number){
     return response
 }
 
-export async function uploadImage(image:FormData){
-    console.log(image)
-    const token = localStorage.getItem('token')
-    const response = await fetch('http://localhost:3000/global/message/upload',{
-        method:"POST",
-        headers:{
-            'Authorization':`Bearer ${token}`
-        },
-        body:image
-    })
-    
-    return response
-
-
-}
+ 

@@ -44,8 +44,9 @@ export async function fetchMessages(){
     return globalMessages
 }
 
-export async function postMessage(Id:number,message:string){
- 
+export async function postMessage(Id:number,message:string,image?:string){
+    console.log(image)
+    console.log(message)
     await prisma.message.create({
         data:{
             content:message,
