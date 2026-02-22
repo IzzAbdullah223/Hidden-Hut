@@ -1,9 +1,11 @@
-import { useEffect,useState} from "react"
-import { fetchMessages,sendMessage,deleteMessage } from "../../services/messagesServices"
+import { useEffect,useState,useRef} from "react"
+import { fetchMessages,sendMessage,deleteMessage,uploadImage } from "../../services/messagesServices"
 import Logo from '../../assets/logo.jpg'
 import image from '../../assets/image.svg'
 import send from '../../assets/send.svg'
 import threeDots from '../../assets/three dots.svg'
+import luffy from '../../assets/Luffy.jpeg'
+import close from '../../assets/close.svg'
 import { Sidebar } from "../Sidebar"
 import {type Messages} from '../../lib/types'
 export function Global(){
@@ -15,6 +17,7 @@ export function Global(){
    const [data,setData]= useState<Messages[]>([])
    const [showDeleteId,setShowDeleteId]= useState<number | null>(null)
    const [refreshTrigger,setRefreshTrigger] = useState(0)
+   const fileInputRef = useRef<HTMLInputElement>(null)
 
    const handleMessageInput =(event:React.ChangeEvent<HTMLTextAreaElement>)=>{
       setMessage(event.target.value)
@@ -27,6 +30,20 @@ export function Global(){
    const handleDelete= async (messageId:number)=>{
        await deleteMessage(messageId)
        setRefreshTrigger(prev=>prev+1)
+   }
+
+   const HandleImageUpload = async()=>{
+      fileInputRef.current?.click()
+   }
+
+   const handleFileSelect = async(e:React.ChangeEvent<HTMLInputElement>)=>{
+      const file = e.target.files?.[0]
+      if(!file) return
+      const formData = new FormData()
+      formData.append('image',file)
+      const response = await uploadImage(formData)
+      console.log(response)
+      
    }
 
    const handleSubmit = async (event:React.SyntheticEvent)=>{
@@ -74,7 +91,6 @@ export function Global(){
       const response = await fetchMessages()
       if(response.status===200){
       const messagesData:Messages[] = await response.json()
-      console.log(messagesData)
       setData(messagesData)
       }
  
@@ -132,15 +148,29 @@ export function Global(){
 
             </div>
 
+         <div className="bg-dark-100">
+             <div className="relative p-3 w-fit h-fit">
+               <img className="w-60 rounded-md" src={luffy}/>
+                  <button className="absolute size-6 top-0 right-0 bg-dark-300 rounded-full p-1 cursor-pointer">
+               <img src={close}/>
+               </button>
+            </div> 
+            <input
+            type="file"
+            ref={fileInputRef}
+            style={{display:'none'}}
+            accept="image/*"
+            onChange={handleFileSelect}/>
             <form onSubmit={handleSubmit}  className="flex items-center gap-2 p-2  bg-dark-100">
                <textarea rows={1} value={message} onChange={handleMessageInput}    className=" resize-none flex-1 py-1.5 px-4  border border-gray-100/10 text-white rounded-3xl"/>
-               <div className="cursor-pointer  p-1.5   border border-gray-100/10 rounded-full">
+               <div onClick={HandleImageUpload} className="cursor-pointer  p-1.5   border border-gray-100/10 rounded-full" >
                   <img src={image} className="size-5 "/>
                </div>
                <button disabled={isSubmitting || !message.trim()} type="submit" className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full disabled:opacity-70">
                   <img src={send} className="size-5"/>
                </button>
             </form>
+         </div>
 
             <Sidebar/>
  

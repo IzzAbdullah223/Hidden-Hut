@@ -1,5 +1,7 @@
 import {type Request, type Response} from 'express'
 import * as db from '../db/queries.js'
+import { upload } from '../middleware/multer.js'
+import cloudinary from '../config/cloudinary.js'
  
  
 
@@ -44,6 +46,25 @@ export async function postMessage(req:Request,res:Response){
     }
 }
 
+export async function uploadImage(req:Request,res:Response){
+    cloudinary.uploader.upload(req.file!.path,{resource_type:"image"},async (err,result)=>{
+        if(err){
+            console.log(err)
+            return res.status(500).json({
+                success:false,
+                message:"Error"
+            })
+        }
+        res.status(200).json({
+            sucess:true,
+            message:"Uploaded!",
+            data:result
+        })
+        console.log(result)
+    })
+
+}
+
 export async function deleteMessage(req:Request,res:Response){
     const messageId = req.body.messageId as number
     try{
@@ -57,3 +78,4 @@ export async function deleteMessage(req:Request,res:Response){
         })
     }
 }
+
