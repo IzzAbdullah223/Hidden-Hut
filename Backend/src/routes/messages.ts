@@ -6,5 +6,5 @@ import { upload } from "../middleware/multer.js";
 export const messagesRouter = Router()
 
 messagesRouter.get('/global/messages',getMessages)
-messagesRouter.post('/global/message',verifyToken,upload.single('image'),postMessage)
-messagesRouter.delete('/global/message',verifyToken,deleteMessage)
+messagesRouter.post('/global/messages',verifyToken,upload.single('image'),postMessage)
+messagesRouter.delete('/global/messages',verifyToken,deleteMessage)

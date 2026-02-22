@@ -14,9 +14,7 @@ export async function sendMessage(formData:FormData){
         headers:{
             'Authorization':`Bearer ${token}`
         },
-        body:JSON.stringify({
-            body:formData
-        })
+        body:formData
     })
     
     return response
