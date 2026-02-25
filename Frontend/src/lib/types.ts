@@ -32,7 +32,8 @@ export type Messages={
     id:number
     content:string
     date:string
-    senderId:number
+    senderId:number,
+    imageUrl:string
     sender:{
         firstName:string,
         lastName:string,

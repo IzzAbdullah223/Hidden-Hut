@@ -21,8 +21,10 @@ export async function sendMessage(formData:FormData){
 }
 
 export async function deleteMessage(messageId:number){
+
+     
     const token = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/global/message`,{
+    const response = await fetch(`http://localhost:3000/global/messages`,{
         method:'DELETE',
         headers:{
             'Content-Type':'application/json',

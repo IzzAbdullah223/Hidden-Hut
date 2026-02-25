@@ -14,6 +14,7 @@ export function Global(){
    const currentUserId = Number(localStorage.getItem('currentUserId'))
    const [message,setMessage]=useState("")
    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+   const [imagePreview,setimagePreview] = useState<string | undefined>(undefined)
    const [isSubmitting, setIsSubmitting] = useState(false)
    const [data,setData]= useState<Messages[]>([])
    const [showDeleteId,setShowDeleteId]= useState<number | null>(null)
@@ -29,7 +30,9 @@ export function Global(){
          }
 
    const handleDelete= async (messageId:number)=>{
-       await deleteMessage(messageId)
+   
+       const response = await deleteMessage(messageId)
+       console.log(response)
        setRefreshTrigger(prev=>prev+1)
    }
 
@@ -37,10 +40,19 @@ export function Global(){
       fileInputRef.current?.click()
    }
 
+   const handleCancelImage = ()=>{
+      setimagePreview(undefined)
+   }
+
    const handleFileSelect = async(e:React.ChangeEvent<HTMLInputElement>)=>{
       const file = e.target.files?.[0]
       if(!file) return
       setSelectedFile(file)
+      if (fileInputRef.current) {
+         fileInputRef.current.value = ""
+      }
+      const imageUrl =  URL.createObjectURL(file);
+      setimagePreview(imageUrl)
        
    }
 
@@ -48,7 +60,7 @@ export function Global(){
       console.log(token)
       console.log(currentUserId)
       event.preventDefault()
-      if(!message.trim()){
+      if(!message.trim() && !selectedFile){ // this isnt really needed since backend deals with protection but good to prevent bypassers woh use stuff like inspect code whatever
          return
       }
 
@@ -61,9 +73,9 @@ export function Global(){
       setIsSubmitting(true)
       
       await sendMessage(formData) //there should be response here but oh well 
-      
       setIsSubmitting(false)
       setMessage('')
+      setimagePreview(undefined)
       setSelectedFile(null)
       setRefreshTrigger(prev=>prev+1)
    }
@@ -96,7 +108,8 @@ export function Global(){
       const response = await fetchMessages()
       if(response.status===200){
       const messagesData:Messages[] = await response.json()
-      setData(messagesData)
+      console.log(messagesData)
+      setData(messagesData)   
       }
  
    }
@@ -117,7 +130,11 @@ export function Global(){
                   <img className="size-8 rounded-full self-end" src="https://res.cloudinary.com/dic5sskvu/image/upload/v1771032844/defaultAvatar_szkhjs.webp"/>
                   <div className="flex flex-col gap-2">
                      <p className="text-dark-500 text-xs ml-3">@pewpew</p>
-                     <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl">Hello !</p>
+
+                     <div className="flex flex-col gap-2"> 
+                        <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit ">Hello !</p>
+                        <img src={luffy} className="max-w-[18rem] w-[90%] rounded-2xl"/>
+                     </div>
                   </div>
                 </div>
 
@@ -134,8 +151,14 @@ export function Global(){
                   showDeleteId === message.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
                }`}>Delete</p>  
          </div>
-          
-        <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl">{message.content}</p>
+         <div className="flex flex-col gap-2 "> 
+            {message.content && (
+               <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit">{message.content}</p>
+            )}
+            {message.imageUrl && (
+               <img src={message.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl"/>
+            )}
+        </div>
       </div>
   ) : (
     //  messages tyle for other people 
@@ -143,7 +166,14 @@ export function Global(){
       <img className="size-8 rounded-full self-end" src={message.sender.pictureURL}/>
       <div className="flex flex-col gap-2">
         <p className="text-dark-500 text-xs ml-3">@{message.sender.firstName}</p>
-        <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl">{message.content}</p>
+         <div className="flex flex-col gap-2 "> 
+            {message.content && (
+               <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit">{message.content}</p>
+            )}
+            {message.imageUrl && (
+               <img src={message.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl"/>
+            )}
+        </div>
       </div>
     </div>
   )
@@ -154,9 +184,9 @@ export function Global(){
             </div>
 
          <div className="bg-dark-100">
-             <div className="relative p-3 w-fit h-fit">
-               <img className="w-60 rounded-md" src={luffy}/>
-                  <button className="absolute size-6 top-0 right-0 bg-dark-300 rounded-full p-1 cursor-pointer">
+             <div className={`relative p-3 w-fit h-fit ${imagePreview? "":"hidden"}`}>
+               <img className="w-60 rounded-md" src={imagePreview}/>
+                  <button onClick={handleCancelImage} className="absolute size-6 top-0 right-0 bg-dark-300 rounded-full p-1 cursor-pointer" >
                <img src={close}/>
                </button>
             </div> 
@@ -171,7 +201,7 @@ export function Global(){
                <div onClick={HandleImageUpload} className="cursor-pointer  p-1.5   border border-gray-100/10 rounded-full" >
                   <img src={image} className="size-5 "/>
                </div>
-               <button disabled={isSubmitting || !message.trim()} type="submit" className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full disabled:opacity-70">
+               <button disabled={isSubmitting || !(message.trim()   || imagePreview)} type="submit" className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full disabled:opacity-70">
                   <img src={send} className="size-5"/>
                </button>
             </form>

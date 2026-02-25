@@ -26,14 +26,16 @@ export async function postMessage(req: Request, res: Response) {
     })
   }
 
-  const message = req.body.message as string
+  const message = req.body.message as string | undefined
   const senderId = req.user.id
-  
-  if (!message.trim()) {
+
+  if(!message?.trim() && !req.file){
     return res.status(400).json({
-      message: "Message cannot be empty"
+        message:"Message or image required"
     })
   }
+ 
+  
 
   let imageUrl: string | undefined = undefined
 
@@ -46,10 +48,8 @@ export async function postMessage(req: Request, res: Response) {
       imageUrl = cloudinaryResult.secure_url
     }
 
-    console.log(senderId)
-    console.log(message)
-    console.log(imageUrl)
-    //await db.postMessage(senderId, message, imageUrl)
+ 
+    await db.postMessage(senderId, message, imageUrl)
     
     return res.status(201).json({
       success: true
@@ -65,7 +65,9 @@ export async function postMessage(req: Request, res: Response) {
  
 
 export async function deleteMessage(req:Request,res:Response){
+ 
     const messageId = req.body.messageId as number
+ 
     try{
         await db.deleteMessage(messageId)
         res.status(200).json({

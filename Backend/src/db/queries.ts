@@ -30,6 +30,7 @@ export async function fetchMessages(){
             id:true,
             date:true,
             content:true,
+            imageUrl:true,
             senderId:true,
             sender:{
                 select:{
@@ -44,12 +45,11 @@ export async function fetchMessages(){
     return globalMessages
 }
 
-export async function postMessage(Id:number,message:string,image?:string){
-    console.log(image)
-    console.log(message)
+export async function postMessage(Id:number,message?:string,image?:string){
     await prisma.message.create({
         data:{
-            content:message,
+            content:message ?? null,
+            imageUrl:image ?? null,
             type:"GLOBAL",
             senderId:Id
         }
