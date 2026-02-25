@@ -5,6 +5,7 @@ import './index.css'
 import { LogIn } from './components/auth/LogIn'
 import { SignUp } from './components/auth/SignUp'
 import { Global } from './components/pages/Global'
+import { SkeletonTheme } from 'react-loading-skeleton'
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,8 @@ export const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
  // <StrictMode>
+      <SkeletonTheme baseColor='#313131' highlightColor='#525252'> 
       <RouterProvider router={router}/>
+      </SkeletonTheme>
   //</StrictMode>,
 )

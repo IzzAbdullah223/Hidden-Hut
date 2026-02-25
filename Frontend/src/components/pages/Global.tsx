@@ -1,5 +1,7 @@
 import { useEffect,useState,useRef} from "react"
 import { fetchMessages,sendMessage,deleteMessage} from "../../services/messagesServices"
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import Logo from '../../assets/logo.jpg'
 import image from '../../assets/image.svg'
 import send from '../../assets/send.svg'
@@ -19,6 +21,7 @@ export function Global(){
    const [data,setData]= useState<Messages[]>([])
    const [showDeleteId,setShowDeleteId]= useState<number | null>(null)
    const [refreshTrigger,setRefreshTrigger] = useState(0)
+   const [Loading,setLoading] = useState(false)
    const fileInputRef = useRef<HTMLInputElement>(null)
 
    const handleMessageInput =(event:React.ChangeEvent<HTMLTextAreaElement>)=>{
@@ -105,23 +108,36 @@ export function Global(){
 
 
    async function Messages(){
+      setLoading(true)
       const response = await fetchMessages()
       if(response.status===200){
       const messagesData:Messages[] = await response.json()
-      console.log(messagesData)
       setData(messagesData)   
       }
+      
+      //setLoading(false)
  
    }
     return(
          <div className="flex flex-col h-screen bg-dark">
-
+            
              <div className="flex items-center gap-2 bg-dark-100 p-2 mt-10 rounded-t-md border-b border-gray-100/10">
-               <img className="size-10  rounded-full" src={Logo}/>
-               <p className=" text-lg capitalize text-white">Global Chat</p>
+               {Loading ? (
+                  <> 
+                  <Skeleton circle width={40} height={40} />
+                  <Skeleton width={170} height={20}/>
+                  </>
+               ):(
+               <> 
+                  <img className="size-10  rounded-full" src={Logo}/>
+                  <p className=" text-lg capitalize text-white">Global Chat</p>
+               </>
+               )}
+ 
              </div>
 
             <div className=" flex-1 bg-dark-100 p-4 border-b border-gray-100/10 overflow-y-auto">
+               
                <p className="text-dark-500 text text-xs text-center">01/06/2026</p>
 
                <div className=" flex flex-col gap-2 "> 
