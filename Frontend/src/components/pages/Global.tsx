@@ -115,7 +115,7 @@ export function Global(){
       setData(messagesData)   
       }
       
-      //setLoading(false)
+      setLoading(false)
  
    }
     return(
@@ -123,10 +123,10 @@ export function Global(){
             
              <div className="flex items-center gap-2 bg-dark-100 p-2 mt-10 rounded-t-md border-b border-gray-100/10">
                {Loading ? (
-                  <> 
+               <> 
                   <Skeleton circle width={40} height={40} />
-                  <Skeleton width={170} height={20}/>
-                  </>
+                  <Skeleton width={180} height={25}/>
+               </>
                ):(
                <> 
                   <img className="size-10  rounded-full" src={Logo}/>
@@ -137,7 +137,36 @@ export function Global(){
              </div>
 
             <div className=" flex-1 bg-dark-100 p-4 border-b border-gray-100/10 overflow-y-auto">
-               
+               {/*test loading start from here */}
+               {Loading? (
+               <div className="flex flex-col gap-2">
+                   <div className="flex justify-end">
+                     <Skeleton width={250} height={40} borderRadius={16}/>
+                   </div>
+                     <div className="flex gap-2">
+                        <Skeleton circle width={40} height={40}/>
+                        <Skeleton width={250} height={40} borderRadius={16}/>
+                   </div>
+                   <div className="flex justify-end">
+                     <Skeleton width={250} height={40} borderRadius={16}/>
+                   </div>
+                   <div className="flex gap-2">
+                     <Skeleton circle width={40} height={40}/>
+                     <Skeleton width={250} height={80} borderRadius={16}/>
+                   </div>
+                  <div className="flex justify-end">
+                     <Skeleton width={250} height={40} borderRadius={16}/>
+                   </div>
+                  <div className="flex justify-end">
+                     <Skeleton width={250} height={40} borderRadius={16}/>
+                   </div>
+                     <div className="flex gap-2">
+                        <Skeleton circle width={40} height={40}/>
+                        <Skeleton width={250} height={40} borderRadius={16}/>
+                   </div>
+               </div>
+               ):(
+               <>
                <p className="text-dark-500 text text-xs text-center">01/06/2026</p>
 
                <div className=" flex flex-col gap-2 "> 
@@ -195,9 +224,11 @@ export function Global(){
   )
 ))}
 
-               </div>
+   </div> 
+</>
+)}
 
-            </div>
+            </div> {/*thats the end of the container*/}
 
          <div className="bg-dark-100">
              <div className={`relative p-3 w-fit h-fit ${imagePreview? "":"hidden"}`}>
