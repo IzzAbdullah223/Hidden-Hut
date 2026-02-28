@@ -14,6 +14,10 @@ export async function signUp(email:string,fName:string,lname:string,password:str
     })
 }
 
+export async function getUsers(){
+    return await prisma.user.findMany()
+}
+
 
 export async function findUserByEmail(email:string){
     const existingUser = await prisma.user.findUnique({

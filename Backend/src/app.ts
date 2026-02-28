@@ -4,6 +4,7 @@ import './config/passport.js'
 import cors from 'cors'
 import { authRouter } from './routes/auth.js';
 import { messagesRouter } from './routes/messages.js';
+import { chatRouter } from './routes/chats.js';
 
 
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/',authRouter)
 app.use('/',messagesRouter)
+app.use('/',chatRouter)
 
 const PORT = process.env.PORT || 3000
 

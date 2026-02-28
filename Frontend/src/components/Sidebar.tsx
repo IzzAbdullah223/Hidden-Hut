@@ -10,24 +10,24 @@ export function Sidebar(){
     return(
         <div className="bg-dark flex items-center justify-between gap-4 p-1">
             
-        <NavLink to={'/global'} className={({isActive})=>isActive? "rounded-md  bg-neutral-400/20 p-3":""}> 
-        <img className='w-6 h-6' src={GlobalIcon}/>
+        <NavLink to={'/global'} className={({isActive})=>isActive? "rounded-md  bg-neutral-400/20 p-3":"hover:bg-neutral-400/20 transition duration-200 rounded-md p-3"}> 
+        <img className='w-7 h-7' src={GlobalIcon}/>
         </NavLink>
 
         <NavLink to={'/chats'}  className={({isActive})=>isActive? "rounded-md  bg-neutral-400/20 p-3":"hover:bg-neutral-400/20 transition duration-200 rounded-md p-3"}>
-         <img className='w-6 h-6' src={messageIcon}/>
+         <img className='w-7 h-7' src={messageIcon}/>
          </NavLink>
 
         <NavLink to={'/groups'} className={({isActive})=>isActive? "rounded-md  bg-neutral-400/20 p-3":"hover:bg-neutral-400/20 transition duration-200 rounded-md p-3"}>
-         <img className='w-6 h-6' src={groupIcon}/>
+         <img className='w-7 h-7' src={groupIcon}/>
          </NavLink>
 
         <NavLink to={'/profile'} className={({isActive})=>isActive? "rounded-md  bg-neutral-400/20 p-3":"hover:bg-neutral-400/20 transition duration-200 rounded-md p-3"}>
-         <img className='w-6 h-6' src={profileIcon}/>
+         <img className='w-7 h-7' src={profileIcon}/>
          </NavLink>
 
         <NavLink to={'/login'} className={({isActive})=>isActive?  "rounded-md  bg-neutral-400/20 p-3":"hover:bg-neutral-400/20 transition duration-200 rounded-md p-3"}>
-         <img className='w-6 h-6' src={logoutIcon}/>
+         <img className='w-7 h-7    ' src={logoutIcon}/>
          </NavLink>
         </div>
     )

@@ -37,4 +37,18 @@ export async function deleteMessage(messageId:number){
     return response
 }
 
+export async function getUsers(){
+    console.log("Yo whatsup?")
+    const token = localStorage.getItem('token')
+    const response = await fetch(`http://localhost:3000/chats/users`,{
+        method:'GET',
+        headers:{
+            'Content-type':'application/json',
+            'Authorization':`Bearer ${token}`
+        }
+    })
+
+    return response
+}
+
  
