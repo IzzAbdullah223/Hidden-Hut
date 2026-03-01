@@ -2,11 +2,11 @@ import { prisma } from "./libs/prisma.js";
 
 
 
-export async function signUp(email:string,fName:string,lname:string,password:string){
+export async function signUp(username:string,fName:string,lname:string,password:string){
     
      await prisma.user.create({
         data:{
-            email:email,
+            username:username,
             firstName:fName,
             lastName:lname,
             password:password
@@ -15,13 +15,21 @@ export async function signUp(email:string,fName:string,lname:string,password:str
 }
 
 export async function getUsers(){
-    return await prisma.user.findMany()
+    return await prisma.user.findMany({
+        select:{
+            id:true,
+            firstName:true,
+            lastName:true,
+            username:true,
+            pictureURL:true
+        }
+    })
 }
 
 
-export async function findUserByEmail(email:string){
+export async function findUserByUsername(username:string){
     const existingUser = await prisma.user.findUnique({
-        where:{email:email}
+        where:{username:username}
     })
     return existingUser
 }

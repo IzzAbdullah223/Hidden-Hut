@@ -6,7 +6,6 @@ import Logo from '../../assets/logo.jpg'
 import image from '../../assets/image.svg'
 import send from '../../assets/send.svg'
 import threeDots from '../../assets/three dots.svg'
-import luffy from '../../assets/Luffy.jpeg'
 import close from '../../assets/close.svg'
 import { Sidebar } from "../Sidebar"
 import {type Messages} from '../../lib/types'
@@ -170,18 +169,6 @@ export function Global(){
                <p className="text-dark-500 text text-xs text-center">01/06/2026</p>
 
                <div className=" flex flex-col gap-2 "> 
-
-                <div className="flex gap-4" >
-                  <img className="size-8 rounded-full self-end" src="https://res.cloudinary.com/dic5sskvu/image/upload/v1771032844/defaultAvatar_szkhjs.webp"/>
-                  <div className="flex flex-col gap-2">
-                     <p className="text-dark-500 text-xs ml-3">@pewpew</p>
-
-                     <div className="flex flex-col gap-2"> 
-                        <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit ">Hello !</p>
-                        <img src={luffy} className="max-w-[18rem] w-[90%] rounded-2xl"/>
-                     </div>
-                  </div>
-                </div>
 
                {data.map((message) => (
                message.senderId === currentUserId ? (

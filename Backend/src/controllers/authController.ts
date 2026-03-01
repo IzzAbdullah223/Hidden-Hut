@@ -16,7 +16,7 @@ declare global{
 interface TokenPayload {
     user: {
         id: number
-        email: string,
+        username: string,
         fName:string,
         lname:string
     }
@@ -36,14 +36,15 @@ export async function signUpPost(req:Request,res:Response){
         return res.status(400).json({errors:zodErrors})
     }
 
-    const exisitngUser = await db.findUserByEmail(result.data.email)
+    const exisitngUser = await db.findUserByUsername(result.data.username)
 
     if(exisitngUser){
-        res.status(400).json({errors:{email:"Email already exists"}})
+        res.status(400).json({errors:{username:"Username already exists"}})
     }
-
+    
     const hashedPassword = await bcrypt.hash(result.data.password,10)
-    await db.signUp(result.data.email,result.data.fName,result.data.lName,hashedPassword)
+ 
+    await db.signUp(result.data.username,result.data.fName,result.data.lName,hashedPassword)
     return res.status(200).json({success:true})
 }
 

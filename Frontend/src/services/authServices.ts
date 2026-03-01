@@ -24,7 +24,7 @@ export async function logIn(data:TLogInSchema){
         method:"POST",
         headers:{'content-Type': 'application/json'},
         body:JSON.stringify({
-            email: data.email,
+            username: data.username,
             password: data.password
         })
     })

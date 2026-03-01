@@ -55,14 +55,13 @@ export function LogIn(){
                     <form onSubmit={handleSubmit(onSubmit)}  className='flex flex-col gap-4 w-full min-[500px]:w-110'>
 
                       <div className='flex flex-col gap-2'>
-                        <label className='text-neutral-400'>Email</label>
+                        <label className='text-neutral-400'>Username</label>
                         <input
-                         {...register('email')}
+                         {...register('username')}
                          className='bg-white pl-2 py-1.75 rounded focus:outline-none text-neutral-800' 
-                         type='text' 
-                         placeholder='Enter your email'/>
-                         {errors.email &&(
-                            <p className='text-red-500 -mt-1 '>{`${errors.email.message}`}</p>
+                         type='text'/>
+                         {errors.username &&(
+                            <p className='text-red-500 -mt-1 '>{`${errors.username.message}`}</p>
                          )}
                       </div>
 
@@ -76,7 +75,7 @@ export function LogIn(){
                             <p className='text-red-500 -mt-1'>{`${errors.password.message}`}</p>
                          )}
                       </div>
-                        <p className='text-red-500 -mt-1 -mb-2'>{`${error? "Invalid email or password": ""}`}</p>
+                        <p className='text-red-500 -mt-1 -mb-2'>{`${error? "Invalid username or password": ""}`}</p>
                           <button
                           disabled={isSubmitting}
                            className='bg-black text-white font-bold p-3 rounded-md cursor-pointer'>

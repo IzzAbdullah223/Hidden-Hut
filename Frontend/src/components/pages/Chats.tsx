@@ -1,29 +1,85 @@
 import { Sidebar } from "../Sidebar"
 import { getUsers } from "../../services/messagesServices"
-import { useEffect } from "react"
+import { useEffect,useState } from "react"
 import plus from '../../assets/plus.svg'
+import {type User} from '../../lib/types'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 export function Chats(){
 
-    const Users=async ()=>{
-        const response = await getUsers()
-        console.log(response)
+    const[data,setData]=useState<User[]>([])
+    const[search,setSearch]=useState(false)
+    const[loading,setLoading]=useState(false)
 
+    const searchUsers=async ()=>{
+        setLoading(true)
+        const response = await getUsers()
+        if(response.status===200){
+            const responseData = await response.json()
+            setData(responseData)
+            setLoading(false)
+        }
     }
 
-
     useEffect(()=>{
-        Users()   
-    },[])
+        if(!search){
+            return
+        }
+        searchUsers()   
+    },[search])
 
     return(
-         <div className="flex flex-col h-screen bg-dark">
+         <div className="flex  flex-col h-screen bg-dark">
             
             
-             <div className="flex items-center justify-between gap-2 bg-dark-100 mt-12 rounded-t-md p-3">
-                   <h1 className="text-white text-3xl font-semibold">Chats</h1>
-                   <button className="transition hover:bg-dark-300 rounded-full p-1"> 
-                        <img src={plus} className="transition size-7 cursor-pointer"/>
-                   </button>
+             <div className=" flex items-center justify-between gap-2 bg-dark-100 mt-12 rounded-t-md p-3">
+                {search?(
+                   <div className="w-full flex flex-col gap-4"> 
+                        <div className="flex items-center justify-between"> 
+                            <h1 className="text-white text-3xl font-semibold">Search Users</h1>
+                            <button className={"transition hover:bg-dark-300 rounded-full  p-1 "} onClick={()=>setSearch(false)}>
+                                <img src={plus} className={`transition size-7 cursor-pointer ${search ? "rotate-45":"rotate-0"}`}/>
+                            </button>
+                        </div>
+                        <input type="text" className="bg-dark-200 px-3 py-1 rounded-3xl text-white"/>
+                         {loading?(
+                        <div className="flex flex-col">
+                                 <Skeleton height={65}/>
+                                <Skeleton height={65}/>
+                                <Skeleton height={65}/>
+                                <Skeleton height={65}/>
+                                <Skeleton height={65}/>
+                        </div>
+
+                         ):(
+                        <div className="flex flex-col gap-5 p-2">
+                            {data.map((user)=>
+                                <div key={user.id} className="flex gap-2 items-center">
+                                    <div className="relative w-fit">
+                                        <img src={user.pictureURL} className="size-10 rounded-full object-cover object-center"/>
+                                        <div className="absolute size-3 rounded-full bottom-0 right-0 bg-stale"></div>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p>{user.firstName} {user.lastName}</p>
+                                        <div className="text-xs text-dark-500">@{user.username}</div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                         )}
+                    </div>
+          
+                    
+
+                ):(
+                <> 
+                    <h1 className="text-white text-3xl font-semibold">Chats</h1>
+                    <button className={"transition hover:bg-gray-400/20 rounded-full p-1"} onClick={()=>setSearch(true)}> 
+                      <img src={plus} className={`transition size-7 cursor-pointer`}/>
+                    </button>
+                </>
+                )}
+ 
              </div>
 
             <div className=" flex-1 bg-dark-100 p-4 border-b border-gray-100/10 overflow-y-auto">

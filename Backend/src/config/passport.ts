@@ -7,17 +7,17 @@ declare global{
     namespace Express{
         interface User{  
             id:number
-            email:string
+            username:string
         }
     }
 }
 
 passport.use(
-    new LocalStrategy({usernameField:"email"}, async(email,password,done)=>{
+    new LocalStrategy( async(username,password,done)=>{
         //usernamefield is usually not needed but since our db has email instead of username we have 
         try{
             const user = await prisma.user.findUnique({
-                where:{email:email}
+                where:{username:username}
             });
 
             if(!user){
