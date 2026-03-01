@@ -1,5 +1,5 @@
 import { Sidebar } from "../Sidebar"
-import { getUsers } from "../../services/messagesServices"
+import { searchUsers } from "../../services/userServices"
 import { useEffect,useState } from "react"
 import plus from '../../assets/plus.svg'
 import {type User} from '../../lib/types'
@@ -8,40 +8,47 @@ import 'react-loading-skeleton/dist/skeleton.css'
 export function Chats(){
 
     const[data,setData]=useState<User[]>([])
-    const[search,setSearch]=useState(false)
+    const[toggleSearch,setToggleSearch]=useState(false)
+    const[searchText,setSearchText] = useState('')
     const[loading,setLoading]=useState(false)
 
-    const searchUsers=async ()=>{
+    const handleSearchText=(event:React.ChangeEvent<HTMLInputElement>)=>{
+        setSearchText(event.target.value)
+        console.log(searchText)
+    }
+
+    const Search=async ()=>{
         setLoading(true)
-        const response = await getUsers()
+        const response = await searchUsers(searchText)
         if(response.status===200){
             const responseData = await response.json()
+            console.log(responseData)
             setData(responseData)
             setLoading(false)
         }
     }
 
     useEffect(()=>{
-        if(!search){
+        if(!toggleSearch){
             return
         }
-        searchUsers()   
-    },[search])
+        Search()   
+    },[toggleSearch,searchText])
 
     return(
          <div className="flex  flex-col h-screen bg-dark">
             
             
              <div className=" flex items-center justify-between gap-2 bg-dark-100 mt-12 rounded-t-md p-3">
-                {search?(
+                {toggleSearch?(
                    <div className="w-full flex flex-col gap-4"> 
                         <div className="flex items-center justify-between"> 
                             <h1 className="text-white text-3xl font-semibold">Search Users</h1>
-                            <button className={"transition hover:bg-dark-300 rounded-full  p-1 "} onClick={()=>setSearch(false)}>
-                                <img src={plus} className={`transition size-7 cursor-pointer ${search ? "rotate-45":"rotate-0"}`}/>
+                            <button className={"transition hover:bg-dark-300 rounded-full  p-1 "} onClick={()=>setToggleSearch(false)}>
+                                <img src={plus} className={`transition size-7 cursor-pointer ${toggleSearch ? "rotate-45":"rotate-0"}`}/>
                             </button>
                         </div>
-                        <input type="text" className="bg-dark-200 px-3 py-1 rounded-3xl text-white"/>
+                        <input type="text" className="bg-dark-200 px-3 py-1 rounded-3xl text-white" value={searchText} onChange={handleSearchText}/>
                          {loading?(
                         <div className="flex flex-col">
                                  <Skeleton height={65}/>
@@ -74,7 +81,7 @@ export function Chats(){
                 ):(
                 <> 
                     <h1 className="text-white text-3xl font-semibold">Chats</h1>
-                    <button className={"transition hover:bg-gray-400/20 rounded-full p-1"} onClick={()=>setSearch(true)}> 
+                    <button className={"transition hover:bg-gray-400/20 rounded-full p-1"} onClick={()=>setToggleSearch(true)}> 
                       <img src={plus} className={`transition size-7 cursor-pointer`}/>
                     </button>
                 </>

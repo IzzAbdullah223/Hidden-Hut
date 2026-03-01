@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getFriends } from "../controllers/chatsController.js";
+import { searchUsers } from "../controllers/usersController.js";
+import { verifyToken } from "../controllers/authController.js";
 
 
 
 export const chatRouter = Router()
 
-chatRouter.get('/chats/users',getFriends)
+chatRouter.post('/chats/search',verifyToken,searchUsers)
