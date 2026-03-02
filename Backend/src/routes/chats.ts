@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { searchUsers } from "../controllers/usersController.js";
+import { getUsers } from "../controllers/usersController.js";
 import { verifyToken } from "../controllers/authController.js";
 
 
 
 export const chatRouter = Router()
 
-chatRouter.post('/chats/search',verifyToken,searchUsers)
+chatRouter.get('/chats',verifyToken,getUsers)

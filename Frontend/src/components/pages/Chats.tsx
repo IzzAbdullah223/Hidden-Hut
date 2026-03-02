@@ -1,5 +1,5 @@
 import { Sidebar } from "../Sidebar"
-import { searchUsers } from "../../services/userServices"
+import { fetchUsers } from "../../services/userServices"
 import { useEffect,useState } from "react"
 import plus from '../../assets/plus.svg'
 import {type User} from '../../lib/types'
@@ -14,15 +14,13 @@ export function Chats(){
 
     const handleSearchText=(event:React.ChangeEvent<HTMLInputElement>)=>{
         setSearchText(event.target.value)
-        console.log(searchText)
     }
 
-    const Search=async ()=>{
+    const getUsers=async ()=>{
         setLoading(true)
-        const response = await searchUsers(searchText)
+        const response = await fetchUsers()
         if(response.status===200){
             const responseData = await response.json()
-            console.log(responseData)
             setData(responseData)
             setLoading(false)
         }
@@ -32,8 +30,8 @@ export function Chats(){
         if(!toggleSearch){
             return
         }
-        Search()   
-    },[toggleSearch,searchText])
+        getUsers()   
+    },[toggleSearch])
 
     return(
          <div className="flex  flex-col h-screen bg-dark">
@@ -60,7 +58,11 @@ export function Chats(){
 
                          ):(
                         <div className="flex flex-col gap-5 p-2">
-                            {data.map((user)=>
+                            {data.filter((user)=>{
+                                return searchText.toLocaleLowerCase()=== ''? user : user.firstName.toLocaleLowerCase().includes(searchText) ||
+                                                                                    user.lastName.toLocaleLowerCase().includes(searchText)  ||
+                                                                                    user.username.toLocaleLowerCase().includes(searchText)
+                            }).map((user)=>
                                 <div key={user.id} className="flex gap-2 items-center">
                                     <div className="relative w-fit">
                                         <img src={user.pictureURL} className="size-10 rounded-full object-cover object-center"/>

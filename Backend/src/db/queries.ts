@@ -26,24 +26,7 @@ export async function getUsers(){
     })
 }
 
-export async function searchUsers(query:string){
-    return await prisma.user.findMany({
-        where:{
-            OR:[
-                {firstName:{contains:query,mode:'insensitive'}},
-                {lastName:{contains:query,mode:'insensitive'}},
-                {username:{contains:query,mode:'insensitive'}}
-            ]
-        },
-        select:{
-            id:true,
-            firstName:true,
-            lastName:true,
-            username:true,
-            pictureURL:true,
-        }
-    })
-}
+ 
 
 
 export async function findUserByUsername(username:string){
