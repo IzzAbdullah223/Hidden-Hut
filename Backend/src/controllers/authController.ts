@@ -35,7 +35,6 @@ export async function signUpPost(req:Request,res:Response){
         })
         return res.status(400).json({errors:zodErrors})
     }
-
     const exisitngUser = await db.findUserByUsername(result.data.username)
 
     if(exisitngUser){

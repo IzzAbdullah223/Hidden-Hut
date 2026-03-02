@@ -36,6 +36,21 @@ export async function findUserByUsername(username:string){
     return existingUser
 }
 
+export async function findUserById(userId:number){
+    const user = await prisma.user.findUnique({
+        where:{id:userId},
+        select:{
+            id:true,
+            firstName:true,
+            lastName:true,
+            username:true,
+            pictureURL:true,
+        }
+    })
+
+    return user
+}
+
 
 export async function fetchMessages(){
     const globalMessages = await prisma.message.findMany({

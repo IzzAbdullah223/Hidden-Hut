@@ -11,3 +11,20 @@ export async function fetchUsers(){
 
     return response
 }
+
+export async function fetchUser(userId:number ){
+    const token = localStorage.getItem('token')
+    console.log(userId)
+
+    const response = await fetch(`http://localhost:3000/profile/${userId}`,{
+        method:"GET",
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+        }
+    })
+
+    return response
+ 
+ 
+}

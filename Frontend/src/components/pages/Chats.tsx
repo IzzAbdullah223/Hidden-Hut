@@ -4,6 +4,7 @@ import { useEffect,useState } from "react"
 import plus from '../../assets/plus.svg'
 import {type User} from '../../lib/types'
 import Skeleton from 'react-loading-skeleton'
+import { Link } from "react-router-dom"
 import 'react-loading-skeleton/dist/skeleton.css'
 export function Chats(){
 
@@ -11,6 +12,7 @@ export function Chats(){
     const[toggleSearch,setToggleSearch]=useState(false)
     const[searchText,setSearchText] = useState('')
     const[loading,setLoading]=useState(false)
+ 
 
     const handleSearchText=(event:React.ChangeEvent<HTMLInputElement>)=>{
         setSearchText(event.target.value)
@@ -57,13 +59,13 @@ export function Chats(){
                         </div>
 
                          ):(
-                        <div className="flex flex-col gap-5 p-2">
+                        <div className="flex flex-col gap-1">
                             {data.filter((user)=>{
                                 return searchText.toLocaleLowerCase()=== ''? user : user.firstName.toLocaleLowerCase().includes(searchText) ||
                                                                                     user.lastName.toLocaleLowerCase().includes(searchText)  ||
                                                                                     user.username.toLocaleLowerCase().includes(searchText)
                             }).map((user)=>
-                                <div key={user.id} className="flex gap-2 items-center">
+                                <Link to={`profile/${user.id}`} key={user.id} className="flex gap-2 items-center hover:bg-dark-200 p-2 rounded-md">
                                     <div className="relative w-fit">
                                         <img src={user.pictureURL} className="size-10 rounded-full object-cover object-center"/>
                                         <div className="absolute size-3 rounded-full bottom-0 right-0 bg-stale"></div>
@@ -72,7 +74,7 @@ export function Chats(){
                                         <p>{user.firstName} {user.lastName}</p>
                                         <div className="text-xs text-dark-500">@{user.username}</div>
                                     </div>
-                                </div>
+                                </Link>
                             )}
                         </div>
                          )}
@@ -84,14 +86,14 @@ export function Chats(){
                 <> 
                     <h1 className="text-white text-3xl font-semibold">Chats</h1>
                     <button className={"transition hover:bg-gray-400/20 rounded-full p-1"} onClick={()=>setToggleSearch(true)}> 
-                      <img src={plus} className={`transition size-7 cursor-pointer`}/>
+                      <img src={plus} className={`transition size-7 cursor-pointer ${toggleSearch ? "rotate-45":"rotate-0"}`}/>
                     </button>
                 </>
                 )}
  
              </div>
 
-            <div className=" flex-1 bg-dark-100 p-4 border-b border-gray-100/10 overflow-y-auto">
+            <div className=" flex-1 bg-dark-100 p-4 overflow-y-auto">
             
 
             </div> 

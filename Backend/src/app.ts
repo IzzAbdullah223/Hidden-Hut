@@ -5,6 +5,7 @@ import cors from 'cors'
 import { authRouter } from './routes/auth.js';
 import { globalRouter } from './routes/global.js';
 import { chatRouter } from './routes/chats.js';
+import { profileRouter } from './routes/profile.js';
 
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use('/',authRouter)
 app.use('/',globalRouter)
 app.use('/',chatRouter)
+app.use('/',profileRouter)
 
 const PORT = process.env.PORT || 3000
 

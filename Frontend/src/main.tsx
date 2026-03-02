@@ -6,6 +6,7 @@ import { LogIn } from './components/auth/LogIn'
 import { SignUp } from './components/auth/SignUp'
 import { Global } from './components/pages/Global'
 import { Chats } from './components/pages/Chats'
+import { Profile } from './components/pages/Profile'
 import { SkeletonTheme } from 'react-loading-skeleton'
 
 export const router = createBrowserRouter([
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
   {
     path:"/chats",
     element:<Chats />
+  },
+  {
+    path:"/profile/:id",
+    element:<Profile/>
   }
 
 ]);
