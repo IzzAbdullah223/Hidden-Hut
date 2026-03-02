@@ -1,5 +1,6 @@
 import { Sidebar } from "../Sidebar"
 import Skeleton from 'react-loading-skeleton'
+import { Button } from "@/components/ui/button"
 import {type User} from '../../lib/types'
 import luffy from '../../assets/Luffy.jpeg'
 import camera from '../../assets/camera.svg'
@@ -41,12 +42,12 @@ export function Profile(){
                             <div className="absolute size-5 rounded-full bottom-3 right-3 bg-stale"></div>
                         </div>
                         <div> 
-                            <p className="text-2xl font-semibold">Test Test 223</p>
+                            <p className="text-2xl font-semibold text-white">Test Test 223</p>
                             <p className="text-dark-500">@{data?.username}</p>
                         </div>
                         <div className="flex gap-2"> 
-                            <button className="text-black bg-white px-4 py-2 rounded-md text-sm font-medium shadow-2xl cursor-pointer ">Edit Profile</button>
-                            <button className="text-black bg-white px-4 py-2 rounded-md text-sm font-medium shadow-2xl cursor-pointer  ">Change Password</button>
+                            <Button variant="secondary" className="text-base ">Edit Profile</Button>
+                            <Button variant="secondary"   className="text-base ">Change Password</Button>
                         </div>
                     </div>
               
