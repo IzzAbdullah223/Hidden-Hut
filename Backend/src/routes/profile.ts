@@ -1,6 +1,9 @@
 import { Router } from "express";
-import { getProfile } from "../controllers/profileController.js";
+import { verifyToken } from "../controllers/authController.js";
+import { getProfile,changeProfilePicture } from "../controllers/profileController.js";
+import { upload } from "../middleware/multer.js";
 
 export const profileRouter = Router()
 
-profileRouter.get('/profile/:id',getProfile)
+profileRouter.get('/profile/:id',verifyToken,getProfile)
+profileRouter.post('/profile/:id',verifyToken,upload.single('image'),changeProfilePicture)

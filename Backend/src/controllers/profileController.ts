@@ -1,5 +1,6 @@
 import {type Request, type Response} from 'express'
 import * as db from '../db/queries.js'
+import cloudinary from '../config/cloudinary.js'
 
 
 export async  function getProfile(req:Request,res:Response){
@@ -20,4 +21,27 @@ export async  function getProfile(req:Request,res:Response){
 
    
  
+}
+
+export async function changeProfilePicture(req:Request,res:Response){
+    const userId = Number(req.body.userId)
+    let imageUrl:string =''
+ 
+     try{
+        if (req.file) {
+                const cloudinaryResult = await cloudinary.uploader.upload(req.file.path, {
+                resource_type: "image"
+            })
+              imageUrl = cloudinaryResult.secure_url
+            }
+                await db.changeProfilePicture(userId,imageUrl)
+                return res.status(200).json({
+                    message:"success"
+                })
+    }catch(e){
+        return res.status(200).json({
+            message:"Failure"
+        })
+    }
+    
 }

@@ -74,6 +74,7 @@ export async function fetchMessages(){
     return globalMessages
 }
 
+ 
 export async function postMessage(Id:number,message?:string,image?:string){
     await prisma.message.create({
         data:{
@@ -93,5 +94,14 @@ export async function deleteMessage(Id:number){
         }
     })
 }
+
+
+export async function changeProfilePicture(Id:number,image:string){
+     await prisma.user.update({
+        where:{id:Id},
+        data:{pictureURL:image}
+     })
+}
+
 
 

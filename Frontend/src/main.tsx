@@ -8,6 +8,7 @@ import { Global } from './components/pages/Global'
 import { Chats } from './components/pages/Chats'
 import { Profile } from './components/pages/Profile'
 import { SkeletonTheme } from 'react-loading-skeleton'
+import { ProfileEdit } from './components/pages/ProfileEdit'
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
   {
     path:"/profile/:id",
     element:<Profile/>
+  },
+  {
+    path:"/profile/edit/:id",
+    element:<ProfileEdit/>
   }
 
 ]);

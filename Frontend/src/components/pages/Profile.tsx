@@ -1,5 +1,6 @@
 import { Sidebar } from "../Sidebar"
 import Skeleton from 'react-loading-skeleton'
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import {type User} from '../../lib/types'
 import luffy from '../../assets/Luffy.jpeg'
@@ -46,8 +47,8 @@ export function Profile(){
                             <p className="text-dark-500">@{data?.username}</p>
                         </div>
                         <div className="flex gap-2"> 
-                            <Button variant="secondary" className="text-base ">Edit Profile</Button>
-                            <Button variant="secondary"   className="text-base ">Change Password</Button>
+                            <Link to={`/profile/edit/${data?.id}`}> <Button variant="secondary" className="text-base ">Edit Profile</Button></Link>
+                             <Button variant="secondary"   className="text-base ">Change Password</Button> 
                         </div>
                     </div>
               

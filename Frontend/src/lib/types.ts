@@ -17,16 +17,29 @@ export const logInSchema = z.object({
     password: z.string().min(5,"Password should be atleast 5 characters")
 })
 
+export const editProfileSchema = z.object({
+    fName: z.string().min(1,'First name must not be  empty'),
+    lName: z.string().min(1,'Last name must not be empty'),
+    username:z.string().min(1,'User name must not be empty'),
+    bio:z.string().optional()
+})
+
+ 
 
 export type TSignUpSchema = z.infer<typeof signUpSchema>
 
 
 export type TLogInSchema = z.infer<typeof logInSchema>
 
+export type TeditProfileSchema = z.infer<typeof editProfileSchema>
+
+
 export type TLogInResponse={
     token:string,
     currentUserId:number
 }
+
+ 
 
 export type Messages={
     id:number
