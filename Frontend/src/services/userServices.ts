@@ -1,3 +1,5 @@
+import {type TeditProfileSchema} from '../lib/types'
+
 export async function fetchUsers(){
     const token = localStorage.getItem('token')
     const response = await fetch(`http://localhost:3000/chats`,{
@@ -25,6 +27,11 @@ export async function fetchUser(userId:number ){
     })
 
     return response
+}
+
+export async function editProfile(data:TeditProfileSchema,userId:string | undefined){
+    console.log(data)
+    console.log(userId)
 }
 
 export async function changeProfilePicture(formData:FormData){

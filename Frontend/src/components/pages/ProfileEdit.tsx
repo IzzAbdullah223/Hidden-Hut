@@ -5,9 +5,11 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { type User, type TeditProfileSchema, editProfileSchema } from '../../lib/types';
 import { useRef } from "react"
-import { changeProfilePicture, fetchUser } from "@/services/userServices"
+import { changeProfilePicture, fetchUser,editProfile } from "@/services/userServices"
 import { zodResolver } from '@hookform/resolvers/zod'
 import {useForm} from 'react-hook-form'
+import { Button } from "../ui/button"
+import edit from '../../assets/edit.svg'
 export function ProfileEdit(){
  
    const{id} = useParams()
@@ -61,7 +63,7 @@ export function ProfileEdit(){
 
     const onSubmit = async(data:TeditProfileSchema)=>{
         setError(false)
-        //const response = await editProfile()
+        const response = await editProfile(data, id)
     }
 
     useEffect(()=>{
@@ -71,7 +73,7 @@ export function ProfileEdit(){
     return(
          <div className="flex  flex-col h-screen bg-dark">
             
-            <div className=" flex flex-col flex-1 mt-12 rounded-md bg-dark-100 p-3 gap-4 text-white"> 
+            <div className=" flex flex-col flex-1 mt-12 rounded-md bg-dark-100 p-3 gap-3 text-white"> 
                 <div className="border-b border-dark-400 pb-2"> 
                     <div className="transition hover:bg-dark-200 rounded-full p-1  w-fit">
                         <Link to={`profile/${id}`}> <img src={back} className="size-7"/></Link>
@@ -79,14 +81,17 @@ export function ProfileEdit(){
                 </div>
                 <div className="flex flex-col gap-5 border-b border-dark-400 pb-4">
                     <div className="flex items-center justify-between"> 
-                        <h1 className="text-lg font-semibold">Profile picture</h1>
+                        <h1 className="text-lg font-semibold text-[1.4rem]">Profile picture</h1>
             <input
             type="file"
             ref={fileInputRef}
             className="hidden"
             accept="image/*"
             onChange={handleFileSelect}/>
-                       <button onClick={handleImageUpload}>change image</button>
+                       <Button onClick={handleImageUpload}  variant="secondary"   className="font-semibold text-dark-100 gap-0 px-3 py-4.5 text-[0.94rem] cursor-pointer hover:bg-secondary">
+                        Edit
+                        <img src={edit} className="size-4 ml-2 mb-[1px]"/>
+                       </Button>
                     </div>
                     <div className="flex justify-center"> 
                         <img src={data?.pictureURL} className="size-[12rem] rounded-full object-cover object-center"/>
@@ -99,7 +104,7 @@ export function ProfileEdit(){
                         {...register("fName")}
                          className="rounded-sm p-1 px-2 bg-dark-200"/>
                          {errors.fName &&(
-                            <p className='text-red-500 text-sm'>{`${errors.fName.message}`}</p>
+                            <p className='text-red-500 text-[1rem]'>{`${errors.fName.message}`}</p>
                          )}
                     </div>
                     <div className="flex flex-col">
@@ -108,7 +113,7 @@ export function ProfileEdit(){
                          {...register('lName')}
                          className="rounded-sm p-1 px-2 bg-dark-200"/>
                          {errors.lName &&(
-                            <p className='text-red-500 text-sm'>{`${errors.lName.message}`}</p>
+                            <p className='text-red-500 text-[1rem]'>{`${errors.lName.message}`}</p>
                          )}
                     </div>
                     <div className="flex flex-col">
@@ -117,7 +122,7 @@ export function ProfileEdit(){
                         {...register('username')}
                          className="rounded-sm p-1 px-2 bg-dark-200 "/>
                          {errors.username &&(
-                            <p className='text-red-500 text-sm'>{`${errors.username.message}`}</p>
+                            <p className='text-red-500 text-[1rem]'>{`${errors.username.message}`}</p>
                          )}
                     </div>
                     <div className="flex flex-col">
@@ -127,7 +132,11 @@ export function ProfileEdit(){
                         className="bg-dark-200 rounded-md px-2 py-1 text-lg 
                         " rows={6}/>
                     </div>
-                    <button disabled={isSubmitting} className="flex justify-end outline-red-500 outline w-full">Submit</button>
+                     <div className="flex justify-end mt-4">
+                        <Button variant="secondary"  className=" cursor-pointer text-[0.94rem] px-4 py-5.5 text-black   ">
+                            Save changes
+                        </Button>
+                    </div>  
                 </form>
                  
            

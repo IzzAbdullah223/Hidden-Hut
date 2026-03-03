@@ -1,5 +1,5 @@
 import { Sidebar } from "../Sidebar"
-import Skeleton from 'react-loading-skeleton'
+//import Skeleton from 'react-loading-skeleton'
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import {type User} from '../../lib/types'
