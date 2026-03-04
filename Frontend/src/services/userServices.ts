@@ -69,7 +69,24 @@ export async function changeProfilePicture(formData:FormData){
 }
 
 export async function passwordChange(formData:TchangePasswordSchema){
-     console.log(formData)
+
+ 
+      const response = await fetch('http://localhost:3000/profile/change/password',{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+        },
+        body:JSON.stringify(formData)
+      })
+
+        const responseData =  await response.json()
+
+     if(!response.ok){
+         return {success:false, errors: responseData.errors}
+     }
+
+     return {success:true}
 }
 
  

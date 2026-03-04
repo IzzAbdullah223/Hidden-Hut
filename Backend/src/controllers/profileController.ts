@@ -1,7 +1,9 @@
 import {type Request, type Response} from 'express'
 import * as db from '../db/queries.js'
 import cloudinary from '../config/cloudinary.js'
-import { editProfileSchema } from '../libs/types.js'
+import { editProfileSchema,changePasswordSchema } from '../libs/types.js'
+import bcrypt from 'bcryptjs'
+ 
  
 
 
@@ -52,13 +54,10 @@ export async function editProfile(req:Request,res:Response){
         const currentUserId= Number(req.body.userId)
        const body: unknown = req.body.data
        const result = editProfileSchema.safeParse(body);
-       let zodErrors = {};
+  
 
     if(!result.success){
-        result.error.issues.forEach((issue)=>{
-            zodErrors = {...zodErrors, [issue.path[0] as string]:issue.message}
-        })
-        return res.status(400).json({errors:zodErrors})
+        return res.status(400).json({ message: "Invalid input" }) 
     }
 
     const existingUser = await db.findUserByUsername(result.data.username)
@@ -77,5 +76,42 @@ export async function editProfile(req:Request,res:Response){
 }
 
 export async function changePassword(req:Request,res:Response){
-    console.log(req.body)
+    const body: unknown = req.body
+
+    const result = changePasswordSchema.safeParse(body);
+
+     if (!result.success) {
+        return res.status(400).json({ message: "Invalid input" })   
+    }
+     if(!req.user){ // check if the request is authenticated the valid jwt so we can use userId
+        return res.status(401).json({
+            message:"Unauthorized"
+        })
+    }   
+        const userId = req.user.id
+        const user = await db.findUserByIdPassword(userId)
+
+        if (!user) { // check if the user exists in the database 
+            return res.status(404).json({ message: "User not found" })
+    }
+
+        const isMatch = await  bcrypt.compare(result.data.password,user.password)
+
+        if(!isMatch){
+            return res.status(400).json({
+                errors:{password:"Old password is incorrect"}
+            })
+        }
+
+        
+        const newPassword = await bcrypt.hash(result.data.newPassword,10)
+        await db.changePassword(userId,newPassword)
+        return res.status(200).json({
+            message:"success"
+        })
+
+        
+        
+ 
+
 }

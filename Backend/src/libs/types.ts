@@ -19,6 +19,15 @@ export const editProfileSchema = z.object({
     bio:z.string().optional()
 })
 
+export const changePasswordSchema = z.object({
+    password:z.string().trim().min(5,'Password should be at least 5 characters'),
+    newPassword:z.string().trim().min(5,'New password should be at least 5 characters'),
+    confirmPassword:z.string().trim().min(5,'New password should be at least 5 characters')
+}).refine(data=>data.newPassword===data.confirmPassword,{
+    message:"Password must match",
+    path: ['confirmPassword']
+})
+
 
 
 export type TSignUpSchema = z.infer<typeof signUpSchema>

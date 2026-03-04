@@ -38,11 +38,19 @@ export function ChangePassword(){
     const onSubmit = async(data:TchangePasswordSchema)=>{
       
          const response = await passwordChange (data)
- 
+            if(response.errors){
+            const errors = response.errors;
+            if(errors.password){
+                setError("password",{
+                    type:"server",
+                    message:errors.password
+                })
+            }
+            }
 
-       /* if(response.success){
+        if(response.success){
              navigate(`/profile/${id}`)
-        }*/
+        }
     }
 
     useEffect(()=>{

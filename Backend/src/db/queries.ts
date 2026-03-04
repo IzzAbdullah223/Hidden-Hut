@@ -52,6 +52,18 @@ export async function findUserById(userId:number){
     return user
 }
 
+export async function findUserByIdPassword(userId:number){
+    const user = await prisma.user.findUnique({
+        where:{id:userId},
+        select:{
+            id:true,
+            password:true,
+        }
+    })
+
+    return user
+}
+
 
 export async function fetchMessages(){
     const globalMessages = await prisma.message.findMany({
@@ -115,5 +127,15 @@ export async function editProfile(Id:number,username:string,firstName:string,las
             bio: bio ?? null
         }
     })
+}
+
+export async function changePassword(Id:number,newPassword:string){
+  await prisma.user.update({
+    where:{id:Id},
+    data:{
+        password:newPassword
+    }
+  })
+
 }
 
