@@ -9,13 +9,13 @@ import { changeProfilePicture, fetchUser,editProfile } from "@/services/userServ
 import { zodResolver } from '@hookform/resolvers/zod'
 import {useForm} from 'react-hook-form'
 import { Button } from "../ui/button"
+import { useNavigate } from "react-router-dom"
 import edit from '../../assets/edit.svg'
 export function ProfileEdit(){
  
    const{id} = useParams()
-
+   const navigate = useNavigate()
    const[data,setData]=useState<User>()
-   const[error,setError] = useState(false)
    const fileInputRef = useRef<HTMLInputElement>(null)
 
    const{
@@ -23,6 +23,7 @@ export function ProfileEdit(){
     handleSubmit,
     formState:{errors,isSubmitting},
     reset,
+    setError,
    } = useForm<TeditProfileSchema>({
         resolver:zodResolver(editProfileSchema)
    })
@@ -62,8 +63,23 @@ export function ProfileEdit(){
     }
 
     const onSubmit = async(data:TeditProfileSchema)=>{
-        setError(false)
+      
         const response = await editProfile(data, id)
+        if(response.errors){
+            const errors = response.errors;
+            if(errors.username){
+                setError("username",{
+                    type:"server",
+                    message:errors.username
+                })
+            }
+        }
+
+        if(response.success){
+             navigate(`/profile/${id}`)
+        }
+
+        
     }
 
     useEffect(()=>{
@@ -76,7 +92,7 @@ export function ProfileEdit(){
             <div className=" flex flex-col flex-1 mt-12 rounded-md bg-dark-100 p-3 gap-3 text-white"> 
                 <div className="border-b border-dark-400 pb-2"> 
                     <div className="transition hover:bg-dark-200 rounded-full p-1  w-fit">
-                        <Link to={`profile/${id}`}> <img src={back} className="size-7"/></Link>
+                        <Link to={`/profile/${id}`}> <img src={back} className="size-7"/></Link>
                     </div>
                 </div>
                 <div className="flex flex-col gap-5 border-b border-dark-400 pb-4">
@@ -133,7 +149,7 @@ export function ProfileEdit(){
                         " rows={6}/>
                     </div>
                      <div className="flex justify-end mt-4">
-                        <Button variant="secondary"  className=" cursor-pointer text-[0.94rem] px-4 py-5.5 text-black   ">
+                        <Button disabled={isSubmitting} variant="secondary"  className=" cursor-pointer text-[0.94rem] px-4 py-5.5 text-black   ">
                             Save changes
                         </Button>
                     </div>  

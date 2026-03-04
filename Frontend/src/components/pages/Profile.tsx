@@ -47,8 +47,8 @@ export function Profile(){
                             <p className="text-dark-500">@{data?.username}</p>
                         </div>
                         <div className="flex gap-2"> 
-                            <Link to={`/profile/edit/${data?.id}`}> <Button variant="secondary" className="text-base ">Edit Profile</Button></Link>
-                             <Button variant="secondary"   className="text-base ">Change Password</Button> 
+                            <Link to={`/profile/edit/${data?.id}`}> <Button variant="secondary" className="text-base cursor-pointer ">Edit Profile</Button></Link>
+                            <Link to={`/profile/change/password/${data?.id}`}> <Button variant="secondary"   className="text-base cursor-pointer ">Change Password</Button></Link>
                         </div>
                     </div>
               

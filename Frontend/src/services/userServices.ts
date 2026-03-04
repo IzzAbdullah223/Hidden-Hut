@@ -1,7 +1,11 @@
-import {type TeditProfileSchema} from '../lib/types'
+import {type TeditProfileSchema, type TchangePasswordSchema} from '../lib/types'
+
+ const token = localStorage.getItem('token')
+ const currentuseridabove = localStorage.getItem("currentUserId")
+ console.log(currentuseridabove)
 
 export async function fetchUsers(){
-    const token = localStorage.getItem('token')
+    
     const response = await fetch(`http://localhost:3000/chats`,{
         method:'GET',
         headers:{
@@ -15,8 +19,6 @@ export async function fetchUsers(){
 }
 
 export async function fetchUser(userId:number ){
-    const token = localStorage.getItem('token')
-    console.log(userId)
 
     const response = await fetch(`http://localhost:3000/profile/${userId}`,{
         method:"GET",
@@ -30,15 +32,31 @@ export async function fetchUser(userId:number ){
 }
 
 export async function editProfile(data:TeditProfileSchema,userId:string | undefined){
-    console.log(data)
-    console.log(userId)
+    const response = await fetch(`http://localhost:3000/profile/edit/${userId}`,{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+        },
+        body:JSON.stringify({
+            data:data,
+            userId:userId
+        })
+    })
+
+  const responseData =  await response.json()
+
+     if(!response.ok){
+         return {success:false, errors: responseData.errors}
+     }
+
+     return {success:true}
 }
 
 export async function changeProfilePicture(formData:FormData){
  
     const userId = formData.get('userId')
-    const token = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/profile/${userId}`,{
+    const response = await fetch(`http://localhost:3000/profile/${userId}/picture`,{
         method:'POST',
         headers:{
             'Authorization':`Bearer ${token}`
@@ -49,4 +67,9 @@ export async function changeProfilePicture(formData:FormData){
 
     return response
 }
+
+export async function passwordChange(formData:TchangePasswordSchema){
+     console.log(formData)
+}
+
  

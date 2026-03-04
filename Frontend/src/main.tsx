@@ -9,6 +9,7 @@ import { Chats } from './components/pages/Chats'
 import { Profile } from './components/pages/Profile'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import { ProfileEdit } from './components/pages/ProfileEdit'
+import { ChangePassword } from './components/pages/ChangePassword'
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
   {
     path:"/profile/edit/:id",
     element:<ProfileEdit/>
+  },
+  {
+    path:"/profile/change/password/:id",
+    element:<ChangePassword/>
   }
 
 ]);

@@ -45,6 +45,7 @@ export async function findUserById(userId:number){
             lastName:true,
             username:true,
             pictureURL:true,
+            bio:true,
         }
     })
 
@@ -104,4 +105,15 @@ export async function changeProfilePicture(Id:number,image:string){
 }
 
 
+export async function editProfile(Id:number,username:string,firstName:string,lastName:string,bio?:string){
+    await prisma.user.update({
+        where:{id:Id},
+        data:{
+            username:username,
+            firstName:firstName,
+            lastName:lastName,
+            bio: bio ?? null
+        }
+    })
+}
 
