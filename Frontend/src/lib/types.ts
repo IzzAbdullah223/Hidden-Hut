@@ -72,6 +72,7 @@ export type User={
     lastName:string,
     username:string,
     pictureURL:string,
+    profileBanner:string
 }
 
  

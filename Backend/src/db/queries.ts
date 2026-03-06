@@ -21,7 +21,7 @@ export async function getUsers(){
             firstName:true,
             lastName:true,
             username:true,
-            pictureURL:true
+            pictureURL:true,
         }
     })
 }
@@ -46,6 +46,7 @@ export async function findUserById(userId:number){
             username:true,
             pictureURL:true,
             bio:true,
+            profileBanner:true
         }
     })
 
@@ -108,6 +109,13 @@ export async function deleteMessage(Id:number){
     })
 }
 
+
+export async function changeProfileBanner(Id:number,image:string){
+   await prisma.user.update({
+    where:{id:Id},
+    data:{profileBanner:image}
+   })
+}
 
 export async function changeProfilePicture(Id:number,image:string){
      await prisma.user.update({

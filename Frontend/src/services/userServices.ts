@@ -2,7 +2,6 @@ import {type TeditProfileSchema, type TchangePasswordSchema} from '../lib/types'
 
  const token = localStorage.getItem('token')
  const currentuseridabove = localStorage.getItem("currentUserId")
- console.log(currentuseridabove)
 
 export async function fetchUsers(){
     
@@ -87,6 +86,18 @@ export async function passwordChange(formData:TchangePasswordSchema){
      }
 
      return {success:true}
+}
+
+export async function changeProfileBanner(formData:FormData){
+    const response = await fetch(`http://localhost:3000/profile/banner`,{
+        method:'POST',
+        headers:{
+            'Authorization':`Bearer ${token}`
+        },
+        body:formData
+    })
+
+    return response
 }
 
  

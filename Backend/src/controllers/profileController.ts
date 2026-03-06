@@ -109,9 +109,30 @@ export async function changePassword(req:Request,res:Response){
         return res.status(200).json({
             message:"success"
         })
+}
 
-        
-        
- 
-
+export async function changeProfileBanner(req:Request,res:Response){
+    let imageUrl:string =''
+    if(!req.user){
+        return res.status(401).json({
+            message:"Unauthorized"
+        })
+    }
+    const userId = req.user.id
+    try{
+        if(req.file){
+            const cloudinaryResult = await cloudinary.uploader.upload(req.file.path, {
+            resource_type: "image"
+            })
+        imageUrl = cloudinaryResult.secure_url
+        await db.changeProfileBanner(userId,imageUrl)
+        return res.status(200).json({
+            message:"success"
+        })
+        }
+    }catch(e){
+        return res.status(500).json({
+            message:"Failed to change banner"
+        })
+    }
 }

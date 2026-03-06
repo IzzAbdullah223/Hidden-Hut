@@ -48,6 +48,7 @@ export function ProfileEdit(){
       if (fileInputRef.current) {
          fileInputRef.current.value = ""
       }
+       
       const formData = new FormData()
       formData.append('image',file)
       formData.append('userId',String(id))

@@ -16,6 +16,7 @@ model User{
   lastName String
   pictureURL String @default("https://res.cloudinary.com/dic5sskvu/image/upload/v1771032844/defaultAvatar_szkhjs.webp")
   bio String?
+  profileBanner String @default("https://res.cloudinary.com/dic5sskvu/image/upload/v1772788070/default_cover_owaxyw.svg")
   messages Message[]
 }
 
