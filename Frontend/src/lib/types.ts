@@ -75,4 +75,15 @@ export type User={
     profileBanner:string
 }
 
+export type Groups={
+    name: string,
+    pictureURl: string,
+    users: User[]
+}
+
+export type Group={
+    groups: Groups[]
+    count:number
+}
+
  

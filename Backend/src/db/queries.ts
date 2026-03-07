@@ -147,3 +147,23 @@ export async function changePassword(Id:number,newPassword:string){
 
 }
 
+export async function getFriends(Id:number){
+  
+    const User = await prisma.user.findUnique({
+        where:{id:Id},
+        include:{friends:true}
+    })
+
+    return User?.friends
+}
+
+export async function getGroups(Id:number){
+    const [groups,count] = await Promise.all([
+        prisma.group.findMany({where:{id:Id}}),
+        prisma.group.count({where:{id:Id}})
+    ])
+
+    return {groups,count}
+}
+
+

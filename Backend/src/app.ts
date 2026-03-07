@@ -6,6 +6,7 @@ import { authRouter } from './routes/auth.js';
 import { globalRouter } from './routes/global.js';
 import { chatRouter } from './routes/chats.js';
 import { profileRouter } from './routes/profile.js';
+import { groupRouter } from './routes/groups.js';
 
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use('/',authRouter)
 app.use('/',globalRouter)
 app.use('/',chatRouter)
 app.use('/',profileRouter)
+app.use('/',groupRouter)
 
 const PORT = process.env.PORT || 3000
 

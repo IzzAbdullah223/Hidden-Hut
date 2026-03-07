@@ -18,6 +18,9 @@ model User{
   bio String?
   profileBanner String @default("https://res.cloudinary.com/dic5sskvu/image/upload/v1772788070/default_cover_owaxyw.svg")
   messages Message[]
+  groups Group[]
+  friends User[] @relation("UserFriends")
+  friendOf User[] @relation("UserFriends")
 }
 
 model Message{
@@ -28,6 +31,13 @@ model Message{
   sender User @relation(fields:[senderId],references: [id])
   senderId Int
   type Type
+}
+
+model Group{
+  id Int @id @default(autoincrement())
+  name String
+  pictureUrl String
+  users User[]
 }
 
 

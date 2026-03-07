@@ -3,9 +3,17 @@ import messageIcon from '../assets/message.svg'
 import groupIcon from '../assets/group.svg'
 import profileIcon from '../assets/profile.svg'
 import logoutIcon from '../assets/logout.svg'
-import { NavLink } from 'react-router-dom'
+import { NavLink,useNavigate } from 'react-router-dom'
 
 export function Sidebar(){
+    const navigate = useNavigate()
+
+
+    const logOut=()=>{
+        localStorage.removeItem('currentUserId')
+        localStorage.removeItem('token')
+        navigate('/login')
+    }
 
         const currentUserId = localStorage.getItem('currentUserId')
 
@@ -28,9 +36,9 @@ export function Sidebar(){
          <img className='w-7 h-7' src={profileIcon}/>
          </NavLink>
 
-        <NavLink to={'/login'} className={({isActive})=>isActive?  "rounded-md  bg-neutral-400/20 p-3":"hover:bg-neutral-400/20 transition duration-200 rounded-md p-3"}>
-         <img className='w-7 h-7    ' src={logoutIcon}/>
-         </NavLink>
+        <div onClick={logOut} className= "hover:bg-neutral-400/20 transition duration-200 rounded-md p-3 cursor-pointer">
+         <img className='w-7 h-7' src={logoutIcon}/>
+         </div>
         </div>
     )
 }

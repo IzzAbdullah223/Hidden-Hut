@@ -15,3 +15,20 @@ export async function getUsers(req:Request,res:Response){
         })
     }
 }
+
+export async function getUserFriends(req:Request,res:Response){
+    if(!req.user){
+        return res.status(401).json({
+            message:"Unauthorized"
+        })
+    }
+    const userId = req.user.id
+    try{
+        const Friends = await db.getFriends(userId)
+        return res.status(200).json(Friends)
+    }catch(err){
+        return res.status(500).json({
+            message:"Failed to retrieve friends."
+        })
+    }
+}
