@@ -11,6 +11,8 @@ import { Profile } from './components/pages/Profile'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import { GroupCreate } from './components/pages/GroupCreate'
 import { ProfileEdit } from './components/pages/ProfileEdit'
+import { FriendChat } from './components/pages/friendChat'
+
 import { ChangePassword } from './components/pages/ChangePassword'
 
 export const router = createBrowserRouter([
@@ -33,6 +35,10 @@ export const router = createBrowserRouter([
   {
     path:"/chats",
     element:<Chats />
+  },
+  {
+    path:'/chats/:id',
+    element:<FriendChat/>
   },
   {
     path:"/profile/:id",

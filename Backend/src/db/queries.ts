@@ -157,6 +157,17 @@ export async function getFriends(Id:number){
     return User?.friends
 }
 
+export async function addFriend(userId:number,friendId:number){
+     await prisma.user.update({
+        where:{id:userId},
+        data:{
+            friends:{
+                connect:{id:friendId}
+            }
+        }
+     })
+}
+
 export async function getGroups(Id:number){
     const [groups,count] = await Promise.all([
         prisma.group.findMany({where:{id:Id}}),

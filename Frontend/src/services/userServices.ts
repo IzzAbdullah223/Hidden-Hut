@@ -100,6 +100,17 @@ export async function changeProfileBanner(formData:FormData){
     return response
 }
 
+export async function getFriend(friendId:number){
+    const response = await fetch(`http://localhost:3000/chats/friend/${friendId}`,{
+        method:'GET',
+        headers:{
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    return response
+}
+
 export async function getFriends(){
     const response = await fetch(`http://localhost:3000/chats/friends`,{
         method:'GET',
@@ -109,6 +120,18 @@ export async function getFriends(){
     })
  
     return response
+}
+
+export async function addFriend(friendId:number){
+    const response = await fetch(`http://localhost:3000/profile/${friendId}`,{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+        }
+    })
+
+    console.log(response)
 }
 
  

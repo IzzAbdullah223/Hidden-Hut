@@ -5,19 +5,20 @@ import { Button } from "@/components/ui/button"
 import {type User} from '../../lib/types'
 import camera from '../../assets/camera.svg'
 import { useEffect,useState,useRef } from "react"
-import { changeProfileBanner, fetchUser } from "../../services/userServices"
+import { addFriend, changeProfileBanner, fetchUser } from "../../services/userServices"
 import { useParams } from "react-router-dom"
 import 'react-loading-skeleton/dist/skeleton.css'
 
 export function Profile(){
     const {id} = useParams()
+    const currentUserId = localStorage.getItem('currentUserId')
+    
     const [data,setData] = useState<User>()
     const [loading,setLoading] = useState(false)
     const [refreshTrigger,setRefreshTrigger] = useState(0)
-   const fileInputRef = useRef<HTMLInputElement>(null)
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const fetchProfile = async ()=>{
-        
         setLoading(true)
         const response = await fetchUser(Number(id))
         if(response.status===200){
@@ -25,7 +26,6 @@ export function Profile(){
             setData(responseData)
             setLoading(false)
         }
-         
     }
 
     const handleImageUpload=()=>{
@@ -33,21 +33,25 @@ export function Profile(){
     }
 
     const handleFileSelect = async(e:React.ChangeEvent<HTMLInputElement>)=>{
-      const file = e.target.files?.[0]
-      if(!file) return
-      if (fileInputRef.current) {
-         fileInputRef.current.value = ""
-      }
-       
-      const formData = new FormData()
-      formData.append('image',file)
-      const response = await changeProfileBanner(formData)
-       console.log(response)
+        const file = e.target.files?.[0]
+        if(!file) return
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ""
+        }
+        
+        const formData = new FormData()
+        formData.append('image',file)
+        const response = await changeProfileBanner(formData)
+        console.log(response)
         if(response.status===200){
             setRefreshTrigger(prev=>prev+1)
         }
+    }
 
-   }
+
+    const sendMessage= async ()=>{
+         const response = await addFriend(Number(id))
+    }
     
     useEffect(()=>{
         fetchProfile()
@@ -75,15 +79,17 @@ export function Profile(){
                     <>
                         <div className="relative">
                             <img src={data?.profileBanner} className="w-full h-[16rem] object-cover object-center rounded-md"/>
-                            <div className="absolute right-2 bottom-2 w-fit p-2 rounded-full bg-dark-300">
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                className="hidden"
-                                accept="image/*"
-                                onChange={handleFileSelect}/>
-                                <img src={camera} className="size-5 cursor-pointer" onClick={handleImageUpload}/>
-                            </div>
+                            {currentUserId === id && (
+                                <div className="absolute right-2 bottom-2 w-fit p-2 rounded-full bg-dark-300">
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleFileSelect}/>
+                                    <img src={camera} className="size-5 cursor-pointer" onClick={handleImageUpload}/>
+                                </div>
+                            )}
                         </div>
                         
                         <div className="flex flex-col gap-4 -mt-25 pl-3">
@@ -95,10 +101,17 @@ export function Profile(){
                                 <p className="text-2xl font-semibold text-white">{data?.firstName} {data?.lastName}</p>
                                 <p className="text-dark-500">@{data?.username}</p>
                             </div>
-                            <div className="flex gap-3 mt-5"> 
-                                <Link to={`/profile/edit/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Edit Profile</Button></Link>
-                                <Link to={`/profile/change/password/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Change Password</Button></Link>
-                            </div>
+                            
+                            {currentUserId === id ? (
+                                <div className="flex gap-3 mt-5"> 
+                                    <Link to={`/profile/edit/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Edit Profile</Button></Link>
+                                    <Link to={`/profile/change/password/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Change Password</Button></Link>
+                                </div>
+                            ) : (
+                                <div className="flex gap-3 mt-5">
+                                    <Button variant="secondary" className="text-base cursor-pointer" onClick={sendMessage}>Send Message</Button>
+                                </div>
+                            )}
                         </div>
                     </>
                 )}

@@ -7,7 +7,7 @@ export async function fetchMessages(){
     return response
 }
 
-export async function sendMessage(formData:FormData){
+export async function sendGlobalMessage(formData:FormData){
     const token  = localStorage.getItem('token')
     const response = await fetch('http://localhost:3000/global/messages',{
         method:"POST",
@@ -19,6 +19,20 @@ export async function sendMessage(formData:FormData){
     
     return response
 }
+
+export async function sendDirectedMessage(formData:FormData,friendId:number){
+    const token  = localStorage.getItem('token')
+    const response = await fetch(`http://localhost:3000/chats/${friendId}/messages`,{
+        method:"POST",
+        headers:{
+            'Authorization':`Bearer ${token}`
+        },
+        body:formData
+    })
+    
+    return response
+}
+ 
 
 export async function deleteMessage(messageId:number){
 

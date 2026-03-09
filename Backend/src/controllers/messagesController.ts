@@ -14,7 +14,6 @@ export async  function getMessages(req:Request,res:Response){
             message:"Failed to retrive messages"
         })
     }
-      
 
       
 }
@@ -26,6 +25,7 @@ export async function postMessage(req: Request, res: Response) {
     })
   }
 
+
   const message = req.body.message as string | undefined
   const senderId = req.user.id
 
@@ -34,6 +34,9 @@ export async function postMessage(req: Request, res: Response) {
         message:"Message or image required"
     })
   }
+
+
+
  
   
 
@@ -60,6 +63,12 @@ export async function postMessage(req: Request, res: Response) {
       success: false
     })
   }
+}
+
+
+export async function postDirectedMessage(req:Request,res:Response){
+    console.log(req.params.id)
+    console.log("this is the directed post message")  
 }
 
  
