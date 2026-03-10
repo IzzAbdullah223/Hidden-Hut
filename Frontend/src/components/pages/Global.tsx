@@ -1,5 +1,5 @@
 import { useEffect,useState,useRef} from "react"
-import { fetchMessages,sendGlobalMessage,deleteMessage} from "../../services/messagesServices"
+import { fetchGlobalMessages,sendGlobalMessage,deleteMessage} from "../../services/messagesServices"
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Logo from '../../assets/logo.jpg'
@@ -108,7 +108,7 @@ export function Global(){
 
    async function Messages(){
       setLoading(true)
-      const response = await fetchMessages()
+      const response = await fetchGlobalMessages()
       if(response.status===200){
       const messagesData:Messages[] = await response.json()
       setData(messagesData)   

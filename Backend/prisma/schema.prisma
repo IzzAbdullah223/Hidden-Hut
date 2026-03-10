@@ -17,7 +17,8 @@ model User{
   pictureURL String @default("https://res.cloudinary.com/dic5sskvu/image/upload/v1771032844/defaultAvatar_szkhjs.webp")
   bio String?
   profileBanner String @default("https://res.cloudinary.com/dic5sskvu/image/upload/v1772788070/default_cover_owaxyw.svg")
-  messages Message[]
+  sentMessages Message[] @relation("SentMessages")      // Matches sender
+  receivedMessages Message[] @relation("ReceivedMessages") // Matches recipient
   groups Group[]
   friends User[] @relation("UserFriends")
   friendOf User[] @relation("UserFriends")
@@ -28,8 +29,10 @@ model Message{
   date DateTime @default(now())
   content String?
   imageUrl String?
-  sender User @relation(fields:[senderId],references: [id])
+  sender User @relation("SentMessages",fields:[senderId],references: [id])
   senderId Int
+  recipent User? @relation("ReceivedMessages",fields:[recipentId],references: [id])
+  recipentId Int?
   type Type
 }
 

@@ -137,22 +137,4 @@ export async function changeProfileBanner(req:Request,res:Response){
     }
 }
 
-export async function addFriend(req:Request,res:Response){
-     if(!req.user){
-        return res.status(401).json({
-            message:"Unauthorized"
-        })
-     }
-     const currentUserId = req.user.id
-     const friendId = Number(req.params.id)
-     try{
-        await db.addFriend(currentUserId,friendId)
-        return res.status(201).json({
-            message:"Friend added"
-        })
-     }catch(err){
-        return res.status(500).json({
-            message:"Failed to add friend"
-        })
-     }
-}
+ 

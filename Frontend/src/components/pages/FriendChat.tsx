@@ -1,5 +1,5 @@
 import { useEffect,useState,useRef} from "react"
-import { fetchMessages,sendDirectedMessage,deleteMessage} from "../../services/messagesServices"
+import { fetchDirectedMessages,sendDirectedMessage,deleteMessage} from "../../services/messagesServices"
 import { getFriend } from "@/services/userServices"
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -70,6 +70,7 @@ export function FriendChat(){
    }
 
    const handleSubmit = async (event:React.SyntheticEvent)=>{
+
       event.preventDefault()
       if(!message.trim() && !selectedFile){ // this isnt really needed since backend deals with protection but good to prevent bypassers woh use stuff like inspect code whatever
          return
@@ -80,10 +81,11 @@ export function FriendChat(){
       if(selectedFile){
          formData.append('image',selectedFile)
       }
-          
+ 
       setIsSubmitting(true)
+ 
       
-      await sendDirectedMessage(formData,Number(id)) //there should be response here but oh well 
+      await sendDirectedMessage(formData,id) //there should be response here but oh well 
       setIsSubmitting(false)
       setMessage('')
       setimagePreview(undefined)
@@ -121,9 +123,10 @@ export function FriendChat(){
 
    async function Messages(){
       setLoading(true)
-      const response = await fetchMessages()
+      const response = await fetchDirectedMessages(Number(id))
       if(response.status===200){
       const messagesData:Messages[] = await response.json()
+    
       setData(messagesData)   
       }
       
@@ -247,6 +250,7 @@ export function FriendChat(){
             className="hidden"
             accept="image/*"
             onChange={handleFileSelect}/>
+
             <form onSubmit={handleSubmit}  className="flex items-center gap-2 p-2  bg-dark-100">
                <textarea rows={1} value={message} onChange={handleMessageInput}    className=" resize-none flex-1 py-1.5 px-4  border border-gray-100/10   rounded-3xl"/>
                <div onClick={HandleImageUpload} className="cursor-pointer  p-1.5   border border-gray-100/10 rounded-full" >
@@ -256,6 +260,8 @@ export function FriendChat(){
                   <img src={send} className="size-5"/>
                </button>
             </form>
+
+
          </div>
 
             <Sidebar/>

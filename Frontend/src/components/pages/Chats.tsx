@@ -100,7 +100,7 @@ export function Chats(){
                     {toggleSearch?(
                     <div className="flex flex-col">
                         {UsersData.map((User)=>(
-                        <Link to={`/chats/${User.id}`} className="flex gap-2 p-2 rounded-md transition hover:bg-dark-200" key={User.id}>
+                        <Link to={`/profile/${User.id}`} className="flex gap-2 p-2 rounded-md transition hover:bg-dark-200" key={User.id}>
                             <div className="flex items-center gap-3">
                                 <img className="size-10 rounded-full" src={User.pictureURL} />
                                 <div className="flex flex-col">

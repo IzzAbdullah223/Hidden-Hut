@@ -1,4 +1,5 @@
-export async function fetchMessages(){
+ 
+export async function fetchGlobalMessages(){
     const response = await fetch('http://localhost:3000/global/messages',{
         method:"GET",
         headers:{'Content-Type': 'application/json'}
@@ -7,8 +8,21 @@ export async function fetchMessages(){
     return response
 }
 
-export async function sendGlobalMessage(formData:FormData){
+export async function fetchDirectedMessages(Id:number){
     const token  = localStorage.getItem('token')
+    const response = await fetch(`http://localhost:3000/chats/${Id}/messages`,{
+        method:"GET",
+        headers:{'Content-Type':'application/json',
+                 'Authorization':`Bearer ${token}`
+        }
+        
+    })
+
+    return response
+}
+
+export async function sendGlobalMessage(formData:FormData){
+     const token  = localStorage.getItem('token')
     const response = await fetch('http://localhost:3000/global/messages',{
         method:"POST",
         headers:{
@@ -20,9 +34,9 @@ export async function sendGlobalMessage(formData:FormData){
     return response
 }
 
-export async function sendDirectedMessage(formData:FormData,friendId:number){
+export async function sendDirectedMessage(formData:FormData,recipentId:string | undefined){
     const token  = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/chats/${friendId}/messages`,{
+    const response = await fetch(`http://localhost:3000/chats/${recipentId}/messages`,{
         method:"POST",
         headers:{
             'Authorization':`Bearer ${token}`

@@ -73,6 +73,7 @@ export type User={
     username:string,
     pictureURL:string,
     profileBanner:string
+    friends:User[]
 }
 
 export type Groups={

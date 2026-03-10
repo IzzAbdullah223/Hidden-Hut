@@ -46,7 +46,8 @@ export async function findUserById(userId:number){
             username:true,
             pictureURL:true,
             bio:true,
-            profileBanner:true
+            profileBanner:true,
+            friends:true
         }
     })
 
@@ -77,6 +78,7 @@ export async function fetchMessages(){
             senderId:true,
             sender:{
                 select:{
+                    username:true,
                     firstName:true,
                     lastName:true,
                     pictureURL:true,
@@ -86,6 +88,44 @@ export async function fetchMessages(){
         })
 
     return globalMessages
+}
+
+export async function fetchDirectedMessages(senderId:number,recipientId:number){
+    const directedMessages = await prisma.message.findMany({
+        select:{
+            id:true,
+            date:true,
+            content:true,
+            imageUrl:true,
+            senderId:true,
+            recipentId:true,
+            sender:{
+                select:{
+                    username:true,
+                    firstName:true,
+                    lastName:true,
+                    pictureURL:true
+                }
+            },
+            recipent:{
+                select:{
+                    username:true,
+                    firstName:true,
+                    lastName:true,
+                    pictureURL:true,
+                }
+            }
+            
+        },
+        where:{type:"DIRECTED",
+            OR:[
+                {senderId:senderId,recipentId:recipientId},
+                {senderId:recipientId,recipentId:senderId}
+            ]
+        }
+    })
+
+    return directedMessages
 }
 
  
@@ -99,6 +139,18 @@ export async function postMessage(Id:number,message?:string,image?:string){
         }
     })
   
+}
+
+export async function postDirectedMessage(senderId:number,recipentId:number,message?:string,image?:string){
+  await prisma.message.create({
+    data:{
+        senderId:senderId,
+        recipentId:recipentId,
+        content:message ?? null,
+        imageUrl: image ?? null,
+        type:"DIRECTED"
+    }
+  })
 }
 
 export async function deleteMessage(Id:number){
@@ -157,16 +209,7 @@ export async function getFriends(Id:number){
     return User?.friends
 }
 
-export async function addFriend(userId:number,friendId:number){
-     await prisma.user.update({
-        where:{id:userId},
-        data:{
-            friends:{
-                connect:{id:friendId}
-            }
-        }
-     })
-}
+ 
 
 export async function getGroups(Id:number){
     const [groups,count] = await Promise.all([

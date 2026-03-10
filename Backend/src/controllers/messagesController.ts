@@ -1,4 +1,4 @@
-import {type Request, type Response} from 'express'
+import e, {type Request, type Response} from 'express'
 import * as db from '../db/queries.js'
 import cloudinary from '../config/cloudinary.js'
  
@@ -66,9 +66,67 @@ export async function postMessage(req: Request, res: Response) {
 }
 
 
+export async function getDirectedMessages(req:Request,res:Response){
+   if(!req.user){
+      return res.status(401).json({
+        message:"Unauthorized"
+      })
+   }
+
+   const senderId = req.user.id
+   const recipentId = Number(req.params.id)
+   const messages = await db.fetchDirectedMessages(senderId,recipentId)
+
+   return res.status(200).json(messages)
+}
+
 export async function postDirectedMessage(req:Request,res:Response){
-    console.log(req.params.id)
-    console.log("this is the directed post message")  
+    
+ 
+  if (!req.user) {
+    return res.status(401).json({
+      message: false
+    })
+  }
+
+
+  const message = req.body.message as string | undefined
+  const senderId = req.user.id
+  const recipentId = Number(req.params.id)
+
+  if(!message?.trim() && !req.file){
+    return res.status(400).json({
+        message:"Message or image required"
+    })
+  }
+
+  
+
+  let imageUrl: string | undefined = undefined
+
+  try {
+    // If user uploaded an image, upload to Cloudinary first
+    if (req.file) {
+      const cloudinaryResult = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "image"
+      })
+      imageUrl = cloudinaryResult.secure_url
+    }
+
+ 
+    await db.postDirectedMessage(senderId,recipentId, message, imageUrl)
+    
+    return res.status(201).json({
+      success: true
+    })
+  } catch (err) {
+   
+    return res.status(500).json({
+      success: false
+    })
+  }   
+    
+ 
 }
 
  

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import {type User} from '../../lib/types'
 import camera from '../../assets/camera.svg'
 import { useEffect,useState,useRef } from "react"
-import { addFriend, changeProfileBanner, fetchUser } from "../../services/userServices"
+import {changeProfileBanner, fetchUser } from "../../services/userServices"
 import { useParams } from "react-router-dom"
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -23,6 +23,7 @@ export function Profile(){
         const response = await fetchUser(Number(id))
         if(response.status===200){
             const responseData = await response.json()
+            console.log(responseData)
             setData(responseData)
             setLoading(false)
         }
@@ -49,10 +50,7 @@ export function Profile(){
     }
 
 
-    const sendMessage= async ()=>{
-         const response = await addFriend(Number(id))
-    }
-    
+ 
     useEffect(()=>{
         fetchProfile()
     },[refreshTrigger])
@@ -108,9 +106,9 @@ export function Profile(){
                                     <Link to={`/profile/change/password/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Change Password</Button></Link>
                                 </div>
                             ) : (
-                                <div className="flex gap-3 mt-5">
-                                    <Button variant="secondary" className="text-base cursor-pointer" onClick={sendMessage}>Send Message</Button>
-                                </div>
+                                <Link to={`/chats/${data?.id}`} className="flex gap-3 mt-5  w-fit">
+                                    <Button variant="secondary" className="text-base cursor-pointer" >Send Message</Button>
+                                </Link>
                             )}
                         </div>
                     </>
