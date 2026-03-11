@@ -1,4 +1,5 @@
 import { prisma } from "./libs/prisma.js";
+ 
 
 
 
@@ -128,6 +129,29 @@ export async function fetchDirectedMessages(senderId:number,recipientId:number){
     return directedMessages
 }
 
+export async function fetchGroupMessages(groupId:number){
+  const groupMessages = await prisma.message.findMany({
+    where:{type:"GROUP",groupId:groupId},
+        select:{
+            id:true,
+            date:true,
+            content:true,
+            imageUrl:true,
+            senderId:true,
+            sender:{
+                select:{
+                    username:true,
+                    firstName:true,
+                    lastName:true,
+                    pictureURL:true,
+                }
+            }
+        }
+  })
+
+  return groupMessages
+}
+
  
 export async function postMessage(Id:number,message?:string,image?:string){
     await prisma.message.create({
@@ -142,6 +166,23 @@ export async function postMessage(Id:number,message?:string,image?:string){
 }
 
 export async function postDirectedMessage(senderId:number,recipentId:number,message?:string,image?:string){
+
+  await prisma.user.update({
+    where:{id:senderId},
+    data:{
+        friends:{connect:{id:recipentId}}
+    }
+  })
+
+  await prisma.user.update({
+    where:{id:recipentId},
+    data:{
+        friends:{connect:{id:senderId}}
+    }
+  })
+
+  
+
   await prisma.message.create({
     data:{
         senderId:senderId,
@@ -151,6 +192,18 @@ export async function postDirectedMessage(senderId:number,recipentId:number,mess
         type:"DIRECTED"
     }
   })
+}
+
+export async function postGroupMessage(senderId:number,groupId:number,message?:string,image?:string){
+    await prisma.message.create({
+        data:{
+            senderId:senderId,
+            groupId:groupId,
+            content:message ?? null,
+            imageUrl:image ?? null,
+            type:"GROUP"
+        }
+    })
 }
 
 export async function deleteMessage(Id:number){
@@ -199,25 +252,63 @@ export async function changePassword(Id:number,newPassword:string){
 
 }
 
-export async function getFriends(Id:number){
+export async function getFriends(Id:number){ //adjst this function to not get password when getting friends
   
     const User = await prisma.user.findUnique({
         where:{id:Id},
+        
         include:{friends:true}
     })
 
     return User?.friends
 }
 
- 
 
-export async function getGroups(Id:number){
-    const [groups,count] = await Promise.all([
-        prisma.group.findMany({where:{id:Id}}),
-        prisma.group.count({where:{id:Id}})
-    ])
-
-    return {groups,count}
+export async function createGroup(groupName:string,groupPicture:string,MembersId:number[]){
+await prisma.group.create({
+  data: {
+    name: groupName,
+    pictureUrl: groupPicture,
+    members: {
+      connect: MembersId.map(id => ({ id: id }))
+    }
+  }
+})
 }
+
+export async function getGroups(userId:number){
+  console.log(userId)
+  const [groups, count] = await Promise.all([
+    prisma.group.findMany({
+      where: {
+        members: {
+          some: {
+            id: userId  // Find groups where this user is a member
+          }
+        }
+      }
+    }),
+    prisma.group.count({
+      where: {
+        members: {
+          some: {
+            id: userId
+          }
+        }
+      }
+    })
+  ])
+  return { groups, count }
+}
+
+export async function getGroup(groupId:number){
+
+    const group = await prisma.group.findUnique({
+        where:{id:groupId}
+    })
+    return group
+}
+
+
 
 

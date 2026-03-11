@@ -1,7 +1,7 @@
 import {type TeditProfileSchema, type TchangePasswordSchema} from '../lib/types'
 
  const token = localStorage.getItem('token')
- const currentuseridabove = localStorage.getItem("currentUserId")
+ 
 
 export async function fetchUsers(){
     

@@ -23,7 +23,7 @@ export function Profile(){
         const response = await fetchUser(Number(id))
         if(response.status===200){
             const responseData = await response.json()
-            console.log(responseData)
+      
             setData(responseData)
             setLoading(false)
         }

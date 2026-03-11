@@ -33,9 +33,16 @@ export const changePasswordSchema = z.object({
     path: ['confirmPassword']
 })
 
+export const createGroupSchema = z.object({
+    groupName:z.string().trim().min(3,'Group name should be at least 3 characters'),
+ 
+})
+
  
 
 export type TSignUpSchema = z.infer<typeof signUpSchema>
+
+export type TcreateGroupSchema = z.infer<typeof createGroupSchema>
 
 export type TLogInSchema = z.infer<typeof logInSchema>
 
@@ -77,8 +84,9 @@ export type User={
 }
 
 export type Groups={
+    id:number,
     name: string,
-    pictureURl: string,
+    pictureUrl: string,
     users: User[]
 }
 

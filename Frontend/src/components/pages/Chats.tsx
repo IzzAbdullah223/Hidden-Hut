@@ -35,6 +35,7 @@ export function Chats(){
         if(response.status===200){
             const responseData = await response.json()
             setUserFriends(responseData)
+            console.log(userFriends)
             setLoadingSkeleton(false)
         }
          
@@ -69,9 +70,6 @@ export function Chats(){
                         </div>
                         <input type="text" className="bg-dark-200 px-3 py-1 rounded-3xl" value={searchText} onChange={handleSearchText}/>
                     </div>
-          
-                    
-
                 ):(
                 <div className="flex flex-col gap-4 w-full"> 
                     <div className="flex justify-between"> 
@@ -111,14 +109,25 @@ export function Chats(){
                          </Link>
                         ))}
                     </div>
-                      
-                          
                     ):(
-                        <p className="italic text-dark-500">You currently got no friends</p>
+                        <>
+                        {userFriends.length > 0 ? (
+                            // do your thing here with friends
+                            userFriends.map((friend) => (
+                                <Link to={`/chats/${friend.id}`} key={friend.id} className="flex gap-2 p-2 rounded-md transition hover:bg-dark-200">
+                                    <img className="size-10 rounded-full" src={friend.pictureURL} />
+                                    <div className="flex flex-col">
+                                        <p>{friend.firstName} {friend.lastName}</p>
+                                        <p className="text-dark-500 text-xs">@{friend.username}</p>
+                                    </div>
+                                </Link>
+                            ))
+                        ) : (
+                            <p className="italic text-dark-500">You currently got no friends</p>
+                        )}
+                        </>
                     )}
                 </div>
-                
-                
             )}
 
             </div> 

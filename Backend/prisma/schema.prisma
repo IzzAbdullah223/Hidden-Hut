@@ -33,6 +33,8 @@ model Message{
   senderId Int
   recipent User? @relation("ReceivedMessages",fields:[recipentId],references: [id])
   recipentId Int?
+  group Group? @relation("GroupMessages", fields: [groupId], references: [id])  
+  groupId Int?   
   type Type
 }
 
@@ -40,7 +42,8 @@ model Group{
   id Int @id @default(autoincrement())
   name String
   pictureUrl String
-  users User[]
+  members User[]
+  messages Message[] @relation("GroupMessages")  
 }
 
 
