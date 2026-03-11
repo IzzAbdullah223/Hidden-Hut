@@ -49,6 +49,7 @@ export function Profile() {
         const response = await fetchUser(Number(id))
         if (response.status === 200) {
             const responseData = await response.json()
+            console.log(responseData)
             setData(responseData)
             resetEdit({
                 fName: responseData.firstName,
@@ -162,9 +163,11 @@ export function Profile() {
                                 <img src={data?.pictureURL} className="rounded-full object-cover object-center !size-[10rem]" />
                                 <div className="absolute size-5 rounded-full bottom-3 right-3 bg-stale"></div>
                             </div>
+                             
                             <div>
                                 <p className="text-2xl font-semibold text-white">{data?.firstName} {data?.lastName}</p>
                                 <p className="text-dark-500">@{data?.username}</p>
+                                <p className="text-dark-500 mt-2">{data?.bio}</p>
                             </div>
                             {currentUserId === id ? (
                                 <div className="flex gap-3 mt-5">
@@ -240,6 +243,7 @@ export function Profile() {
                                     <div>
                                         <p className="text-2xl font-semibold text-white">{data?.firstName} {data?.lastName}</p>
                                         <p className="text-dark-500">@{data?.username}</p>
+                                        <p className="text-dark-500">{data?.bio}</p>
                                     </div>
                                     {currentUserId === id ? (
                                         <div className="flex justify-end gap-3 mt-5">
