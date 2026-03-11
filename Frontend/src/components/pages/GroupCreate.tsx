@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createGroupSchema, type TcreateGroupSchema, type User } from "@/lib/types"
 import { getFriends } from "@/services/userServices"
 import { createGroup } from "@/services/groupServices"
+import { errorToast } from '@/lib/toastStyles'
 import edit from '../../assets/edit.svg'
 
 export function GroupCreate() {
@@ -81,7 +82,7 @@ export function GroupCreate() {
   const onSubmit = async (data: TcreateGroupSchema) => {
 
     if (!fileInputRef.current?.files?.[0]) {
-      alert("Please select a picture")
+       errorToast('Fill in the form', 'Please select a picture')
       return
     }
     if(friends.length<1){

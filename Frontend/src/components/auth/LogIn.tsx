@@ -5,6 +5,8 @@ import {useForm} from 'react-hook-form'
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { logIn } from '../../services/authServices';
+import { successToast } from '@/lib/toastStyles';
+import { errorToast } from '@/lib/toastStyles';
 
 
 export function LogIn(){
@@ -34,7 +36,11 @@ export function LogIn(){
             const token = data.token
             localStorage.setItem('token',token)
             localStorage.setItem('currentUserId',String(data.currentUserId))
+            successToast('Log in sucessful')
             navigate('/global')
+        }
+        else{
+            errorToast('Failed to login\nInvalid username or password')
         }
     }
 
