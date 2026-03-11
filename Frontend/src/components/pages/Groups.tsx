@@ -139,7 +139,7 @@ export function Groups() {
 
             <Sidebar />
 
-            {/* Groups List Panel */}
+            {/*  groups list panel */}
             <div className="flex flex-col flex-1 sm:flex-none sm:w-80 bg-dark-100 mt-12 sm:mt-0 rounded-t-md sm:rounded-md text-white">
                 <div className="p-3">
                     <div className="flex flex-col gap-4 w-full">
@@ -169,7 +169,7 @@ export function Groups() {
                                 <div className="flex flex-col">
                                     {groupsData?.groups.map(group => (
                                         <div key={group.id}>
-                                            {/* Mobile: navigate to GroupChat page */}
+                                            {/*  mobile navigate to group chat */}
                                             <Link
                                                 to={`/group/chats/${group.id}`}
                                                 className="flex sm:hidden gap-2 p-2 rounded-md transition hover:bg-dark-200"
@@ -180,7 +180,7 @@ export function Groups() {
                                                 </div>
                                             </Link>
 
-                                            {/* Desktop: open inline chat panel */}
+                                            {/* desktop open the chat panel sm+ */}
                                             <div
                                                 onClick={() => handleGroupClick(group.id)}
                                                 className={`hidden sm:flex gap-2 p-2 rounded-md transition cursor-pointer ${selectedGroupId === group.id ? 'bg-dark-200' : 'hover:bg-dark-200'}`}
@@ -199,17 +199,17 @@ export function Groups() {
                 </div>
             </div>
 
-            {/* Chat Panel */}
+            {/* chat panel */}
             <div className="hidden sm:flex sm:flex-col sm:flex-1 overflow-hidden rounded-md bg-dark-100">
                 {selectedGroup ? (
                     <>
-                        {/* Header */}
+                        {/* header*/}
                         <div className="flex items-center gap-2 p-3 border-b border-gray-100/10">
                             <img src={selectedGroup.pictureUrl} className="size-10 rounded-full" />
                             <p className="text-lg text-white">{selectedGroup.name}</p>
                         </div>
 
-                        {/* Messages */}
+                        {/* messages */}
                         <div className="flex-1 p-4 border-b border-gray-100/10 overflow-y-auto">
                             {loadingMessages ? (
                                 <div className="flex flex-col gap-2">
@@ -265,7 +265,7 @@ export function Groups() {
                             )}
                         </div>
 
-                        {/* Input */}
+                      
                         <div className="bg-dark-100">
                             <div className={`relative p-3 w-fit h-fit ${imagePreview ? "" : "hidden"}`}>
                                 <img className="w-60 rounded-md" src={imagePreview} />

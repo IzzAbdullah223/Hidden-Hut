@@ -143,7 +143,7 @@ export function Global() {
 
       <Sidebar />
 
-      {/* Search Panel - Hidden on mobile, visible on sm: */}
+      {/* srch panel hidden on mobile but viisble on desktop */}
       <div className="hidden sm:flex sm:flex-col sm:w-80 bg-dark-100 border-r rounded-md border-gray-100/10 text-white">
         <div className="p-4">
           <h1 className=" text-2xl font-semibold mb-3">Global Chat</h1>
@@ -185,10 +185,10 @@ export function Global() {
         </div>
       </div>
 
-      {/* Chat Content */}
+      {/*  chat content  */}
       <div className="flex flex-col flex-1 overflow-hidden rounded-sm">
 
-        {/* Header */}
+        {/* header  */}
         <div className="flex items-center gap-2 bg-dark-100 p-3 mt-10 sm:mt-0 border-b border-gray-100/10">
           {Loading ? (
             <>
@@ -203,7 +203,7 @@ export function Global() {
           )}
         </div>
 
-        {/* Messages */}
+        {/* messages */}
         <div className="flex-1 bg-dark-100 p-4 border-b border-gray-100/10 overflow-y-auto">
           {Loading ? (
             <div className="flex flex-col gap-2">
@@ -283,7 +283,7 @@ export function Global() {
 
         </div>
 
-        {/* Input */}
+        {/* send message input  */}
         <div className="bg-dark-100">
           <div className={`relative p-3 w-fit h-fit ${imagePreview ? "" : "hidden"}`}>
             <img className="w-60 rounded-md" src={imagePreview} />

@@ -21,7 +21,7 @@ export function Chats() {
   const [searchText, setSearchText] = useState('')
   const [loadingSkeleton, setLoadingSkeleton] = useState(false)
 
-  // Chat state
+   
   const [selectedFriendId, setSelectedFriendId] = useState<number | null>(null)
   const [selectedFriend, setSelectedFriend] = useState<User | null>(null)
   const [messages, setMessages] = useState<Messages[]>([])
@@ -165,7 +165,7 @@ export function Chats() {
 
       <Sidebar />
 
-      {/* Friends List Panel */}
+      {/*  friend list panel  */}
       <div className="flex flex-col flex-1 sm:flex-none sm:w-80 bg-dark-100 mt-12 sm:mt-0 rounded-t-md sm:rounded-md text-white">
         <div className="p-3">
           {toggleSearch ? (
@@ -254,17 +254,17 @@ export function Chats() {
         </div>
       </div>
 
-      {/* Chat Panel - Always visible on sm+, shows placeholder when no friend selected */}
+      {/*  chat panel display chats till user click on a friend always visible on sm+ */}
       <div className="hidden sm:flex sm:flex-col sm:flex-1 overflow-hidden rounded-md bg-dark-100">
         {selectedFriend ? (
           <>
-            {/* Header */}
+            {/* header */}
             <div className="flex items-center gap-2 p-3 border-b border-gray-100/10">
               <img src={selectedFriend.pictureURL} className="size-10 rounded-full" />
               <p className="text-lg text-white">{selectedFriend.firstName} {selectedFriend.lastName}</p>
             </div>
 
-            {/* Messages */}
+            {/* messages */}
             <div className="flex-1 p-4 border-b border-gray-100/10 overflow-y-auto">
               {loadingMessages ? (
                 <div className="flex flex-col gap-2">
@@ -321,7 +321,7 @@ export function Chats() {
               )}
             </div>
 
-            {/* Input */}
+            { }
             <div className="bg-dark-100">
               <div className={`relative p-3 w-fit h-fit ${imagePreview ? "" : "hidden"}`}>
                 <img className="w-60 rounded-md" src={imagePreview} />
