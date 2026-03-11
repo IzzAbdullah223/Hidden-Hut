@@ -260,8 +260,8 @@ export function Chats() {
           <>
             {/* header */}
             <div className="flex items-center gap-2 p-3 border-b border-gray-100/10">
-              <img src={selectedFriend.pictureURL} className="size-10 rounded-full" />
-              <p className="text-lg text-white">{selectedFriend.firstName} {selectedFriend.lastName}</p>
+              <Link to={`/profile/${selectedFriend.id}`}> <img src={selectedFriend.pictureURL} className="size-10 rounded-full" /> </Link>
+              <Link to={`/profile/${selectedFriend.id}`} className="text-lg text-white hover:underline">{selectedFriend.firstName} {selectedFriend.lastName}</Link>
             </div>
 
             {/* messages */}

@@ -125,6 +125,9 @@ export function Global() {
     if (response.status === 200) {
       const messagesData: Messages[] = await response.json()
       setData(messagesData)
+      const date = new Date()
+      console.log(date.getDay())
+      console.log(messagesData[0].date)
     }
 
     setLoading(false)
@@ -242,12 +245,12 @@ export function Global() {
                   message.senderId === currentUserId ? (
 
 
-                    <div className="flex justify-end items-center gap-2" key={message.id}>
+                    <div className="flex justify-end items-center gap-2 text-white" key={message.id}>
                       <div className="cursor-pointer relative three-dots-menu" onClick={() => toggleDeleteMenu(message.id)}>
                         <img className="size-5" src={threeDots} />
                         <p
                           onClick={() => handleDelete(message.id)}
-                          className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === message.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
+                          className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200  shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === message.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
                             }`}>Delete</p>
                       </div>
                       <div className="flex flex-col gap-2 ">

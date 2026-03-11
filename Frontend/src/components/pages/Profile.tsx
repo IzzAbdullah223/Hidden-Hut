@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button"
 import { type User, type TeditProfileSchema, editProfileSchema, changePasswordSchema, type TchangePasswordSchema } from '../../lib/types'
 import camera from '../../assets/camera.svg'
 import edit from '../../assets/edit.svg'
+import back from '../../assets/back.svg'
 import { useEffect, useState, useRef } from "react"
 import { changeProfileBanner, changeProfilePicture, fetchUser, editProfile, passwordChange } from "../../services/userServices"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import 'react-loading-skeleton/dist/skeleton.css'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -16,7 +17,9 @@ type ActivePanel = 'profile' | 'edit' | 'password'
 
 export function Profile() {
     const { id } = useParams()
+    const navigate = useNavigate()
     const currentUserId = localStorage.getItem('currentUserId')
+    const isOwnProfile = Number(currentUserId) === Number(id)
 
     const [data, setData] = useState<User>()
     const [loading, setLoading] = useState(false)
@@ -49,7 +52,6 @@ export function Profile() {
         const response = await fetchUser(Number(id))
         if (response.status === 200) {
             const responseData = await response.json()
-            console.log(responseData)
             setData(responseData)
             resetEdit({
                 fName: responseData.firstName,
@@ -61,9 +63,7 @@ export function Profile() {
         }
     }
 
-    const handleBannerUpload = () => {
-        fileInputRef.current?.click()
-    }
+    const handleBannerUpload = () => fileInputRef.current?.click()
 
     const handleBannerFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -72,14 +72,10 @@ export function Profile() {
         const formData = new FormData()
         formData.append('image', file)
         const response = await changeProfileBanner(formData)
-        if (response.status === 200) {
-            setRefreshTrigger(prev => prev + 1)
-        }
+        if (response.status === 200) setRefreshTrigger(prev => prev + 1)
     }
 
-    const handleProfilePicUpload = () => {
-        profilePicInputRef.current?.click()
-    }
+    const handleProfilePicUpload = () => profilePicInputRef.current?.click()
 
     const handleProfilePicSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -89,18 +85,13 @@ export function Profile() {
         formData.append('image', file)
         formData.append('userId', String(id))
         const response = await changeProfilePicture(formData)
-        if (response.status === 200) {
-            fetchProfile()
-        }
+        if (response.status === 200) fetchProfile()
     }
 
     const onEditSubmit = async (formData: TeditProfileSchema) => {
         const response = await editProfile(formData, id)
-        if (response.errors) {
-            const errors = response.errors
-            if (errors.username) {
-                setEditError("username", { type: "server", message: errors.username })
-            }
+        if (response.errors?.username) {
+            setEditError("username", { type: "server", message: response.errors.username })
         }
         if (response.success) {
             fetchProfile()
@@ -110,27 +101,23 @@ export function Profile() {
 
     const onPasswordSubmit = async (formData: TchangePasswordSchema) => {
         const response = await passwordChange(formData)
-        if (response.errors) {
-            const errors = response.errors
-            if (errors.password) {
-                setPasswordError("password", { type: "server", message: errors.password })
-            }
+        if (response.errors?.password) {
+            setPasswordError("password", { type: "server", message: response.errors.password })
         }
-        if (response.success) {
-            setActivePanel('profile')
-        }
+        if (response.success) setActivePanel('profile')
     }
 
     useEffect(() => {
+        setActivePanel('profile')
         fetchProfile()
-    }, [refreshTrigger])
+    }, [id, refreshTrigger])
 
     return (
         <div className="flex flex-col sm:flex-row sm:gap-1 sm:p-1 sm:pb-2 md:p-3 md:gap-3 h-screen bg-dark">
 
             <Sidebar />
 
-   
+            {/* MOBILE: plain profile view */}
             <div className="flex sm:hidden flex-col flex-1 p-3 mt-12 rounded-lg bg-dark-100">
                 {loading ? (
                     <>
@@ -151,7 +138,7 @@ export function Profile() {
                     <>
                         <div className="relative">
                             <img src={data?.profileBanner} className="w-full h-[16rem] object-cover object-center rounded-md" />
-                            {currentUserId === id && (
+                            {isOwnProfile && (
                                 <div className="absolute right-2 bottom-2 w-fit p-2 rounded-full bg-dark-300">
                                     <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleBannerFileSelect} />
                                     <img src={camera} className="size-5 cursor-pointer" onClick={handleBannerUpload} />
@@ -163,13 +150,12 @@ export function Profile() {
                                 <img src={data?.pictureURL} className="rounded-full object-cover object-center !size-[10rem]" />
                                 <div className="absolute size-5 rounded-full bottom-3 right-3 bg-stale"></div>
                             </div>
-                             
                             <div>
                                 <p className="text-2xl font-semibold text-white">{data?.firstName} {data?.lastName}</p>
                                 <p className="text-dark-500">@{data?.username}</p>
                                 <p className="text-dark-500 mt-2">{data?.bio}</p>
                             </div>
-                            {currentUserId === id ? (
+                            {isOwnProfile ? (
                                 <div className="flex gap-3 mt-5">
                                     <Link to={`/profile/edit/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Edit Profile</Button></Link>
                                     <Link to={`/profile/change/password/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Change Password</Button></Link>
@@ -184,14 +170,23 @@ export function Profile() {
                 )}
             </div>
 
-            {/*  options panel */}
+            {/* DESKTOP: options panel */}
             <div className="hidden sm:flex flex-col sm:w-64 bg-dark-100 rounded-md text-white">
                 <div className="p-3 border-b border-dark-400">
-                    <h1 className="text-[1.6rem] font-semibold">Manage Profile</h1>
+                    {isOwnProfile ? (
+                        <h1 className="text-[1.6rem] font-semibold">Manage Profile</h1>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => navigate(-1)} className="transition hover:bg-dark-200 rounded-full p-1">
+                                <img src={back} className="size-6" />
+                            </button>
+                            <h1 className="text-[1.4rem] font-semibold">User Profile</h1>
+                        </div>
+                    )}
                 </div>
                 <div className="flex-1 px-3 py-2 overflow-y-auto">
                     <div className="flex flex-col gap-1 text-dark-500">
-                        {(['profile', 'edit', 'password'] as ActivePanel[]).map(panel => (
+                        {(['profile', ...(isOwnProfile ? ['edit', 'password'] : [])] as ActivePanel[]).map(panel => (
                             <div
                                 key={panel}
                                 onClick={() => setActivePanel(panel)}
@@ -204,10 +199,10 @@ export function Profile() {
                 </div>
             </div>
 
-            {/*  content panel  */}
+            {/* DESKTOP: content panel */}
             <div className="hidden sm:flex sm:flex-col sm:flex-1 overflow-hidden rounded-md bg-dark-100">
 
-                {/*  profile view */}
+                {/* PROFILE VIEW */}
                 {activePanel === 'profile' && (
                     <div className="flex-1 overflow-y-auto p-3">
                         {loading ? (
@@ -228,7 +223,7 @@ export function Profile() {
                             <>
                                 <div className="relative">
                                     <img src={data?.profileBanner} className="w-full h-[16rem] object-cover object-center rounded-md" />
-                                    {currentUserId === id && (
+                                    {isOwnProfile && (
                                         <div className="absolute right-2 bottom-2 w-fit p-2 rounded-full bg-dark-300">
                                             <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleBannerFileSelect} />
                                             <img src={camera} className="size-5 cursor-pointer" onClick={handleBannerUpload} />
@@ -245,7 +240,7 @@ export function Profile() {
                                         <p className="text-dark-500">@{data?.username}</p>
                                         <p className="text-dark-500">{data?.bio}</p>
                                     </div>
-                                    {currentUserId === id ? (
+                                    {isOwnProfile ? (
                                         <div className="flex justify-end gap-3 mt-5">
                                             <Button onClick={() => setActivePanel('edit')} variant="secondary" className="text-base cursor-pointer">Edit Profile</Button>
                                         </div>
@@ -260,7 +255,7 @@ export function Profile() {
                     </div>
                 )}
 
-                {/* edit profile view  */}
+                {/* EDIT PROFILE VIEW */}
                 {activePanel === 'edit' && (
                     <div className="flex flex-col flex-1 p-3 gap-3 text-white overflow-y-auto">
                         <div className="flex flex-col gap-5 border-b border-dark-400 pb-4">
@@ -305,7 +300,7 @@ export function Profile() {
                     </div>
                 )}
 
-                {/*  change password view  */}
+                {/* CHANGE PASSWORD VIEW */}
                 {activePanel === 'password' && (
                     <div className="flex flex-col flex-1 p-3 gap-2 text-white overflow-y-auto">
                         <div className="border-b border-dark-400 pb-2">
