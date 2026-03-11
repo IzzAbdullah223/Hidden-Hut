@@ -27,11 +27,11 @@ export function GroupChat() {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fetchGroupData = async () => {
-     const response = await getGroup(id)
-     if (response.status === 200) {
-       const responseData = await response.json()
-       setGroup(responseData)
-     }
+    const response = await getGroup(id)
+    if (response.status === 200) {
+      const responseData = await response.json()
+      setGroup(responseData)
+    }
   }
 
   const handleMessageInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -43,9 +43,9 @@ export function GroupChat() {
   }
 
   const handleDelete = async (messageId: number) => {
-     const response = await deleteMessage(messageId)
-     console.log(response)
-     setRefreshTrigger(prev => prev + 1)
+    const response = await deleteMessage(messageId)
+    console.log(response)
+    setRefreshTrigger(prev => prev + 1)
   }
 
   const HandleImageUpload = async () => {
@@ -63,7 +63,7 @@ export function GroupChat() {
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
-    const imageUrl = URL.createObjectURL(file);
+    const imageUrl = URL.createObjectURL(file)
     setImagePreview(imageUrl)
   }
 
@@ -80,7 +80,6 @@ export function GroupChat() {
     }
 
     setIsSubmitting(true)
-
     await sendGroupMessage(formData, id)
     setIsSubmitting(false)
     setMessage('')
@@ -96,36 +95,33 @@ export function GroupChat() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
-
       if (!target.closest('.three-dots-menu')) {
         setShowDeleteId(null)
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside)
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
 
   useEffect(() => {
-    Messages()
+    fetchMessages()
   }, [refreshTrigger])
 
-  async function Messages() {
+  async function fetchMessages() {
     setLoading(true)
-     const response = await fetchGroupMessages(Number(id))
-     if (response.status === 200) {
-       const messagesData: Messages[] = await response.json()
-       setData(messagesData)
-       console.log(messagesData)
-     }
+    const response = await fetchGroupMessages(Number(id))
+    if (response.status === 200) {
+      const messagesData: Messages[] = await response.json()
+      setData(messagesData)
+    }
     setLoading(false)
   }
 
   return (
     <div className="flex flex-col h-screen bg-dark text-white">
+
       <div className="flex items-center gap-2 bg-dark-100 p-3 mt-12 rounded-t-md border-b border-gray-100/10">
         {Loading ? (
           <>
@@ -135,7 +131,7 @@ export function GroupChat() {
         ) : (
           <div className="flex gap-2 items-center">
             <button className="transition hover:bg-dark-200 rounded-full p-1 w-fit">
-              <Link to={`/groups`}> <img src={back} className="size-7" /></Link>
+              <Link to={`/groups`}><img src={back} className="size-7" /></Link>
             </button>
             <img src={group?.pictureUrl} className="size-10 rounded-full" />
             <p className="text-lg">{group?.name}</p>
@@ -173,39 +169,38 @@ export function GroupChat() {
           </div>
         ) : (
           <>
-            <p className="text-dark-500 text text-xs text-center">01/06/2026</p>
+            <p className="text-dark-500 text-xs text-center">01/06/2026</p>
 
             <div className="flex flex-col gap-2">
-              {data.map((message) => (
-                message.senderId === currentUserId ? (
-                  <div className="flex justify-end items-center gap-2" key={message.id}>
-                    <div className="cursor-pointer relative three-dots-menu" onClick={() => toggleDeleteMenu(message.id)}>
+              {data.map((msg) => (
+                msg.senderId === currentUserId ? (
+                  <div className="flex justify-end items-center gap-2" key={msg.id}>
+                    <div className="cursor-pointer relative three-dots-menu" onClick={() => toggleDeleteMenu(msg.id)}>
                       <img className="size-5" src={threeDots} />
                       <p
-                        onClick={() => handleDelete(message.id)}
-                        className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === message.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
-                          }`}>Delete</p>
+                        onClick={() => handleDelete(msg.id)}
+                        className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === msg.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>Delete</p>
                     </div>
-                    <div className="flex flex-col gap-2 ">
-                      {message.content && (
-                        <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{message.content}</p>
+                    <div className="flex flex-col gap-2">
+                      {msg.content && (
+                        <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
                       )}
-                      {message.imageUrl && (
-                        <img src={message.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
+                      {msg.imageUrl && (
+                        <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
                       )}
                     </div>
                   </div>
                 ) : (
-                  <div className="flex gap-4" key={message.id}>
-                    <img className="size-8 rounded-full self-end" src={message.sender.pictureURL} />
+                  <div className="flex gap-4" key={msg.id}>
+                    <img className="size-8 rounded-full self-end" src={msg.sender.pictureURL} />
                     <div className="flex flex-col gap-2">
-                      <p className="text-dark-500 text-xs ml-3">@{message.sender.firstName}</p>
-                      <div className="flex flex-col gap-2 ">
-                        {message.content && (
-                          <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{message.content}</p>
+                      <p className="text-dark-500 text-xs ml-3">@{msg.sender.firstName}</p>
+                      <div className="flex flex-col gap-2">
+                        {msg.content && (
+                          <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
                         )}
-                        {message.imageUrl && (
-                          <img src={message.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
+                        {msg.imageUrl && (
+                          <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
                         )}
                       </div>
                     </div>
@@ -220,21 +215,16 @@ export function GroupChat() {
       <div className="bg-dark-100">
         <div className={`relative p-3 w-fit h-fit ${imagePreview ? "" : "hidden"}`}>
           <img className="w-60 rounded-md" src={imagePreview} />
-          <button onClick={handleCancelImage} className="absolute size-6 top-0 right-0 bg-dark-300 rounded-full p-1 cursor-pointer" >
+          <button onClick={handleCancelImage} className="absolute size-6 top-0 right-0 bg-dark-300 rounded-full p-1 cursor-pointer">
             <img src={close} />
           </button>
         </div>
-        <input
-          type="file"
-          ref={fileInputRef}
-          className="hidden"
-          accept="image/*"
-          onChange={handleFileSelect} />
+        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileSelect} />
 
         <form onSubmit={handleSubmit} className="flex items-center gap-2 p-2 bg-dark-100">
           <textarea rows={1} value={message} onChange={handleMessageInput} className="resize-none flex-1 py-1.5 px-4 border border-gray-100/10 rounded-3xl" />
-          <div onClick={HandleImageUpload} className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full" >
-            <img src={image} className="size-5 " />
+          <div onClick={HandleImageUpload} className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full">
+            <img src={image} className="size-5" />
           </div>
           <button disabled={isSubmitting || !(message.trim() || imagePreview)} type="submit" className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full disabled:opacity-70">
             <img src={send} className="size-5" />
