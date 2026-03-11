@@ -26,7 +26,7 @@ export function Sidebar() {
                 <img className='size-7 sm:size-6' src={GlobalIcon} />
                 <p className='font-semibold hidden lg:block text-lg'>Global</p>
             </NavLink>
-            <NavLink to={'/chats'} className={({ isActive }) => isActive ? " flex items-center gap-2  rounded-md bg-neutral-400/20 p-3" : " w-full flex items-center gap-2  hover:bg-neutral-400/20 transition duration-200 rounded-md p-3"}>
+            <NavLink to={'/chats'} className={({ isActive }) => isActive ? " flex items-center gap-2  rounded-md bg-neutral-400/20 p-3 sm:w-full" : "  flex items-center gap-2  hover:bg-neutral-400/20 transition duration-200 rounded-md p-3 sm:w-full"}>
                 <img className='size-7 sm:size-6' src={messageIcon} />
                 <p className='font-semibold hidden lg:block text-lg'>Chats</p>
             </NavLink>
