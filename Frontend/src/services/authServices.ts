@@ -3,7 +3,7 @@ import { type TSignUpSchema, type TLogInSchema } from '../lib/types';
  
 
 export async function signUp(data:TSignUpSchema){
-     const response = await fetch('http://localhost:3000/signup',{
+     const response = await fetch(`${import.meta.env.VITE_API_URL}/signup`,{
         method:"POST",
         headers:{'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -20,7 +20,7 @@ export async function signUp(data:TSignUpSchema){
 }
 
 export async function logIn(data:TLogInSchema){
-    const response = await fetch('http://localhost:3000/login',{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/login`,{
         method:"POST",
         headers:{'content-Type': 'application/json'},
         body:JSON.stringify({

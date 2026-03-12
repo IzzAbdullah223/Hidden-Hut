@@ -1,6 +1,6 @@
  
 export async function fetchGlobalMessages(){
-    const response = await fetch('http://localhost:3000/global/messages',{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/global/messages`,{
         method:"GET",
         headers:{'Content-Type': 'application/json'}
     })
@@ -10,7 +10,7 @@ export async function fetchGlobalMessages(){
 
 export async function fetchDirectedMessages(Id:number){
     const token  = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/chats/${Id}/messages`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/${Id}/messages`,{
         method:"GET",
         headers:{'Content-Type':'application/json',
                  'Authorization':`Bearer ${token}`
@@ -23,7 +23,7 @@ export async function fetchDirectedMessages(Id:number){
 
 export async function fetchGroupMessages(Id:number){
     const token  = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/chats/group/${Id}/messages`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/group/${Id}/messages`,{
         method:"GET",
         headers:{'Content-Type':'application/json',
                  'Authorization':`Bearer ${token}`
@@ -36,7 +36,7 @@ export async function fetchGroupMessages(Id:number){
  
 export async function sendGlobalMessage(formData:FormData){
      const token  = localStorage.getItem('token')
-    const response = await fetch('http://localhost:3000/global/messages',{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/global/messages`,{
         method:"POST",
         headers:{
             'Authorization':`Bearer ${token}`
@@ -49,7 +49,7 @@ export async function sendGlobalMessage(formData:FormData){
 
 export async function sendDirectedMessage(formData:FormData,recipentId:string | undefined){
     const token  = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/chats/${recipentId}/messages`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/${recipentId}/messages`,{
         method:"POST",
         headers:{
             'Authorization':`Bearer ${token}`
@@ -62,7 +62,7 @@ export async function sendDirectedMessage(formData:FormData,recipentId:string | 
 
 export async function sendGroupMessage(formData:FormData,groupId:string | undefined){
     const token  = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/chats/group/${groupId}/messages`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/group/${groupId}/messages`,{
         method:"POST",
         headers:{
             'Authorization':`Bearer ${token}`
@@ -81,7 +81,7 @@ export async function deleteMessage(messageId:number){
 
      
     const token = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/global/messages`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/global/messages`,{
         method:'DELETE',
         headers:{
             'Content-Type':'application/json',

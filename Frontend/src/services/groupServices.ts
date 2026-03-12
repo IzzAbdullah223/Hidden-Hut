@@ -1,6 +1,6 @@
 const token = localStorage.getItem('token')
 export async function getGroups(){
-    const response = await fetch('http://localhost:3000/groups',{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/groups`,{
         method:'GET',
         headers:{
             'Content-type':'application/json',
@@ -13,7 +13,7 @@ export async function getGroups(){
 
 export async function createGroup(formData:FormData){
      
-    const response = await fetch(`http://localhost:3000/groups`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/groups`,{
         method:'POST',
         headers:{
             'Authorization':`Bearer ${token}`
@@ -25,7 +25,7 @@ export async function createGroup(formData:FormData){
 }
 
 export async function getGroup(groupId:string | undefined){
-    const response = await fetch(`http://localhost:3000/groups/${groupId}`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/groups/${groupId}`,{
         method:'GET',
         headers:{
             'Content-type':'application/json',

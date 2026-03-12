@@ -140,12 +140,12 @@ export function Global() {
   )
 
   return (
-    <div className="flex flex-col sm:flex-row sm:gap-1 sm:p-1 sm:pb-2 md:p-3 md:gap-3 h-screen bg-dark">
+    <div className="flex flex-col sm:flex-row sm:gap-1 sm:p-1 sm:pb-2 md:p-3 md:gap-3 h-screen bg-dark text-white">
 
       <Sidebar />
 
       {/* search panel on visible on sm+ */}
-      <div className="hidden sm:flex sm:flex-col sm:w-80 bg-dark-100 border-r rounded-md border-gray-100/10 text-white">
+      <div className="hidden sm:flex sm:flex-col sm:w-80 bg-dark-100 border-r rounded-md border-gray-100/10">
         <div className="p-4">
           <h1 className="text-2xl font-semibold mb-3">Global Chat</h1>
           <input
@@ -176,7 +176,7 @@ export function Global() {
                     className="size-10 rounded-full object-cover object-center"
                   />
                   <div className="flex flex-col">
-                    <p className="text-white">{user.firstName} {user.lastName}</p>
+                    <p>{user.firstName} {user.lastName}</p>
                     <p className="text-xs text-dark-500">@{user.username}</p>
                   </div>
                 </Link>
@@ -199,7 +199,7 @@ export function Global() {
           ) : (
             <>
               <img className="size-10 rounded-full" src={Logo} />
-              <p className="text-lg capitalize text-white">Global Chat</p>
+              <p className="text-lg capitaliz">Global Chat</p>
             </>
           )}
         </div>
@@ -255,7 +255,7 @@ export function Global() {
                             <img className="size-5" src={threeDots} />
                             <p
                               onClick={() => handleDelete(msg.id)}
-                              className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === msg.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
+                              className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === msg.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
                                 }`}>Delete</p>
                           </div>
                           <div className="flex flex-col gap-2 ">
@@ -274,7 +274,7 @@ export function Global() {
                             <p className="text-dark-500 text-xs ml-3">@{msg.sender.firstName}</p>
                             <div className="flex flex-col gap-2 ">
                               {msg.content && (
-                                <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
+                                <p className="bg-dark-200  py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
                               )}
                               {msg.imageUrl && (
                                 <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
@@ -307,7 +307,7 @@ export function Global() {
             accept="image/*"
             onChange={handleFileSelect} />
           <form onSubmit={handleSubmit} className="flex items-center gap-2 p-2 bg-dark-100">
-            <textarea rows={1} value={message} onChange={handleMessageInput} className="resize-none w-full flex-1 shrink py-1.5 px-4 border border-gray-100/10 text-white rounded-3xl" />
+            <textarea rows={1} value={message} onChange={handleMessageInput} className="resize-none w-full flex-1 shrink py-1.5 px-4 border border-gray-100/10 rounded-3xl" />
             <div onClick={HandleImageUpload} className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full" >
               <img src={image} className="size-5 sm:size-8 " />
             </div>

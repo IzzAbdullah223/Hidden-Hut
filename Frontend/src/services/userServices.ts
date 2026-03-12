@@ -5,7 +5,7 @@ import {type TeditProfileSchema, type TchangePasswordSchema} from '../lib/types'
 
 export async function fetchUsers(){
     
-    const response = await fetch(`http://localhost:3000/chats`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/chats`,{
         method:'GET',
         headers:{
             'Content-Type':'application/json',
@@ -19,7 +19,7 @@ export async function fetchUsers(){
 
 export async function fetchUser(userId:number ){
 
-    const response = await fetch(`http://localhost:3000/profile/${userId}`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/${userId}`,{
         method:"GET",
         headers:{
             'Content-Type':'application/json',
@@ -31,7 +31,7 @@ export async function fetchUser(userId:number ){
 }
 
 export async function editProfile(data:TeditProfileSchema,userId:string | undefined){
-    const response = await fetch(`http://localhost:3000/profile/edit/${userId}`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/edit/${userId}`,{
         method:'POST',
         headers:{
             'Content-Type':'application/json',
@@ -55,7 +55,7 @@ export async function editProfile(data:TeditProfileSchema,userId:string | undefi
 export async function changeProfilePicture(formData:FormData){
  
     const userId = formData.get('userId')
-    const response = await fetch(`http://localhost:3000/profile/${userId}/picture`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/${userId}/picture`,{
         method:'POST',
         headers:{
             'Authorization':`Bearer ${token}`
@@ -70,7 +70,7 @@ export async function changeProfilePicture(formData:FormData){
 export async function passwordChange(formData:TchangePasswordSchema){
 
  
-      const response = await fetch('http://localhost:3000/profile/change/password',{
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/change/password`,{
         method:'POST',
         headers:{
             'Content-Type':'application/json',
@@ -89,7 +89,7 @@ export async function passwordChange(formData:TchangePasswordSchema){
 }
 
 export async function changeProfileBanner(formData:FormData){
-    const response = await fetch(`http://localhost:3000/profile/banner`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/banner`,{
         method:'POST',
         headers:{
             'Authorization':`Bearer ${token}`
@@ -101,7 +101,7 @@ export async function changeProfileBanner(formData:FormData){
 }
 
 export async function getFriend(friendId:number){
-    const response = await fetch(`http://localhost:3000/chats/friend/${friendId}`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/friend/${friendId}`,{
         method:'GET',
         headers:{
             'Authorization': `Bearer ${token}`
@@ -112,7 +112,7 @@ export async function getFriend(friendId:number){
 }
 
 export async function getFriends(){
-    const response = await fetch(`http://localhost:3000/chats/friends`,{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/friends`,{
         method:'GET',
         headers:{
             'Authorization':`Bearer ${token}`
