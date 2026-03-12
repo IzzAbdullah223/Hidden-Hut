@@ -88,9 +88,12 @@ export function Global() {
 
   const getUsers = async () => {
     setLoadingUsers(true)
+    console.log("get users")
     const response = await fetchUsers()
+    console.log(response)
     if (response.status === 200) {
       const responseData = await response.json()
+      console.log(responseData)
       setUsers(responseData)
     }
     setLoadingUsers(false)
