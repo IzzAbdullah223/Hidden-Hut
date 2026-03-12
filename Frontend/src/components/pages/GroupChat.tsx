@@ -11,6 +11,7 @@ import close from '../../assets/close.svg'
 import { Link, useParams } from "react-router-dom"
 import { Sidebar } from "../Sidebar"
 import { type Messages, type Groups } from '../../lib/types'
+import { formatDate, isSameDay } from '@/lib/utils'
 
 export function GroupChat() {
   const currentUserId = Number(localStorage.getItem('currentUserId'))
@@ -167,46 +168,58 @@ export function GroupChat() {
               <Skeleton width={250} height={40} borderRadius={16} />
             </div>
           </div>
+        ) : data.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-dark-500 italic text-lg">Start a conversation, say Hi!</p>
+          </div>
         ) : (
           <>
-            <p className="text-dark-500 text-xs text-center">01/06/2026</p>
-
             <div className="flex flex-col gap-2">
-              {data.map((msg) => (
-                msg.senderId === currentUserId ? (
-                  <div className="flex justify-end items-center gap-2" key={msg.id}>
-                    <div className="cursor-pointer relative three-dots-menu" onClick={() => toggleDeleteMenu(msg.id)}>
-                      <img className="size-5" src={threeDots} />
-                      <p
-                        onClick={() => handleDelete(msg.id)}
-                        className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === msg.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>Delete</p>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {msg.content && (
-                        <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
-                      )}
-                      {msg.imageUrl && (
-                        <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex gap-4" key={msg.id}>
-                    <img className="size-8 rounded-full self-end" src={msg.sender.pictureURL} />
-                    <div className="flex flex-col gap-2">
-                      <p className="text-dark-500 text-xs ml-3">@{msg.sender.firstName}</p>
-                      <div className="flex flex-col gap-2">
-                        {msg.content && (
-                          <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
-                        )}
-                        {msg.imageUrl && (
-                          <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
-                        )}
+              {data.map((msg, index) => {
+                const showDate = index === 0 || !isSameDay(data[index - 1].date, msg.date)
+
+                return (
+                  <div key={msg.id}>
+                    {showDate && (
+                      <p className="text-dark-500 text-xs text-center my-2">{formatDate(msg.date)}</p>
+                    )}
+
+                    {msg.senderId === currentUserId ? (
+                      <div className="flex justify-end items-center gap-2">
+                        <div className="cursor-pointer relative three-dots-menu" onClick={() => toggleDeleteMenu(msg.id)}>
+                          <img className="size-5" src={threeDots} />
+                          <p
+                            onClick={() => handleDelete(msg.id)}
+                            className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === msg.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>Delete</p>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          {msg.content && (
+                            <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
+                          )}
+                          {msg.imageUrl && (
+                            <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="flex gap-4">
+                        <img className="size-8 rounded-full self-end" src={msg.sender.pictureURL} />
+                        <div className="flex flex-col gap-2">
+                          <p className="text-dark-500 text-xs ml-3">@{msg.sender.firstName}</p>
+                          <div className="flex flex-col gap-2">
+                            {msg.content && (
+                              <p className="bg-dark-200 py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
+                            )}
+                            {msg.imageUrl && (
+                              <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )
-              ))}
+              })}
             </div>
           </>
         )}

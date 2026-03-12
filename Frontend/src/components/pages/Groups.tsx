@@ -18,6 +18,7 @@ import { Button } from "../ui/button"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { errorToast } from '@/lib/toastStyles'
+import { formatDate, isSameDay } from '@/lib/utils'  // Add this import at top
 
 type ActiveView = 'chat' | 'create'
 
@@ -374,50 +375,63 @@ export function Groups() {
                                     <p className="text-lg text-white">{selectedGroup.name}</p>
                                 </div>
 
-                                <div className="flex-1 p-4 border-b border-gray-100/10 overflow-y-auto">
-                                    {loadingMessages ? (
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex justify-end">
-                                                <Skeleton width={250} height={40} borderRadius={16} />
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Skeleton circle width={40} height={40} />
-                                                <Skeleton width={250} height={40} borderRadius={16} />
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <p className="text-dark-500 text-xs text-center">01/06/2026</p>
-                                            <div className="flex flex-col gap-2">
-                                                {messages.map((msg) => (
-                                                    msg.senderId === currentUserId ? (
-                                                        <div className="flex justify-end items-center gap-2" key={msg.id}>
-                                                            <div className="cursor-pointer relative three-dots-menu" onClick={() => toggleDeleteMenu(msg.id)}>
-                                                                <img className="size-5" src={threeDots} />
-                                                                <p onClick={() => handleDelete(msg.id)} className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === msg.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>Delete</p>
-                                                            </div>
-                                                            <div className="flex flex-col gap-2">
-                                                                {msg.content && <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit">{msg.content}</p>}
-                                                                {msg.imageUrl && <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />}
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex gap-4" key={msg.id}>
-                                                            <img className="size-8 rounded-full self-end" src={msg.sender.pictureURL} />
-                                                            <div className="flex flex-col gap-2">
-                                                                <p className="text-dark-500 text-xs ml-3">@{msg.sender.firstName}</p>
-                                                                <div className="flex flex-col gap-2">
-                                                                    {msg.content && <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit">{msg.content}</p>}
-                                                                    {msg.imageUrl && <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                ))}
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
+<div className="flex-1 p-4 border-b border-gray-100/10 overflow-y-auto">
+  {loadingMessages ? (
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-end">
+        <Skeleton width={250} height={40} borderRadius={16} />
+      </div>
+      <div className="flex gap-2">
+        <Skeleton circle width={40} height={40} />
+        <Skeleton width={250} height={40} borderRadius={16} />
+      </div>
+    </div>
+  ) : messages.length === 0 ? (
+    <div className="flex items-center justify-center h-full">
+      <p className="text-dark-500 italic text-lg">Start a conversation, say Hi!</p>
+    </div>
+  ) : (
+    <>
+      <div className="flex flex-col gap-2">
+        {messages.map((msg, index) => {
+          const showDate = index === 0 || !isSameDay(messages[index - 1].date, msg.date)
+
+          return (
+            <div key={msg.id}>
+              {showDate && (
+                <p className="text-dark-500 text-xs text-center my-2">{formatDate(msg.date)}</p>
+              )}
+
+              {msg.senderId === currentUserId ? (
+                <div className="flex justify-end items-center gap-2">
+                  <div className="cursor-pointer relative three-dots-menu" onClick={() => toggleDeleteMenu(msg.id)}>
+                    <img className="size-5" src={threeDots} />
+                    <p onClick={() => handleDelete(msg.id)} className={`absolute top-full mt-3 -right-10 z-10 py-2 px-4 rounded-md cursor-pointer bg-dark-200 text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-all duration-200 ${showDeleteId === msg.id ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>Delete</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {msg.content && <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit">{msg.content}</p>}
+                    {msg.imageUrl && <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex gap-4">
+                  <img className="size-8 rounded-full self-end" src={msg.sender.pictureURL} />
+                  <div className="flex flex-col gap-2">
+                    <p className="text-dark-500 text-xs ml-3">@{msg.sender.firstName}</p>
+                    <div className="flex flex-col gap-2">
+                      {msg.content && <p className="bg-dark-200 text-white py-2 px-4 rounded-2xl w-fit">{msg.content}</p>}
+                      {msg.imageUrl && <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </>
+  )}
+</div>
 
                                 <div className="bg-dark-100">
                                     <div className={`relative p-3 w-fit h-fit ${imagePreview ? "" : "hidden"}`}>
