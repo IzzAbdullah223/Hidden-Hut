@@ -277,7 +277,7 @@ await prisma.group.create({
 }
 
 export async function getGroups(userId:number){
-  console.log(userId)
+ 
   const [groups, count] = await Promise.all([
     prisma.group.findMany({
       where: {

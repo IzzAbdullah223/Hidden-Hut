@@ -4,16 +4,20 @@ import { Link } from "react-router"
 import { type TSignUpSchema, signUpSchema } from '../../lib/types'
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import toast from 'react-hot-toast'
+import { successToast } from '@/lib/toastStyles';
+import { useNavigate } from 'react-router'
  
+
  
 export function SignUp(){
     
+   const navigate = useNavigate()
  
      const{
         register,
         handleSubmit,
         formState: {errors,isSubmitting},
-        reset,
         setError,
      } = useForm<TSignUpSchema>({
         resolver: zodResolver(signUpSchema) 
@@ -60,8 +64,11 @@ export function SignUp(){
          }
 
 
-         if(responseData.success)
-            reset()
+         if(responseData.success){
+            successToast('Account created successfully! You can log in now.')
+            navigate('/login')
+         }
+             
      }
  
     

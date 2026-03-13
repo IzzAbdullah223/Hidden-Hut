@@ -15,7 +15,7 @@ import { formatDate, isSameDay } from '@/lib/utils'
 
 export function Global() {
 
-  const token = localStorage.getItem('token')
+ 
   const currentUserId = Number(localStorage.getItem('currentUserId'))
   const [message, setMessage] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -118,8 +118,13 @@ export function Global() {
 
   useEffect(() => {
     Messages()
+ 
+  }, [refreshTrigger ])
+
+    useEffect(()=>{
     getUsers()
-  }, [refreshTrigger])
+  },[])
+
 
 
 

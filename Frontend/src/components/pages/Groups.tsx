@@ -18,7 +18,7 @@ import { Button } from "../ui/button"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { errorToast } from '@/lib/toastStyles'
-import { formatDate, isSameDay } from '@/lib/utils'  // Add this import at top
+import { formatDate, isSameDay } from '@/lib/utils'   
 
 type ActiveView = 'chat' | 'create'
 

@@ -11,10 +11,11 @@ import { type User, type Messages } from '../../lib/types'
 import Skeleton from 'react-loading-skeleton'
 import { Link } from "react-router-dom"
 import 'react-loading-skeleton/dist/skeleton.css'
-import { formatDate, isSameDay } from '@/lib/utils'  // Add this import at top
+import { formatDate, isSameDay } from '@/lib/utils'   
+import { useParams } from "react-router-dom"
 
 export function Chats() {
-
+  const { id: paramId } = useParams()
   const currentUserId = Number(localStorage.getItem('currentUserId'))
   const [UsersData, setUsersData] = useState<User[]>([])
   const [userFriends, setUserFriends] = useState<User[]>([])
@@ -139,6 +140,12 @@ export function Chats() {
     }
     getUsers()
   }, [toggleSearch])
+
+useEffect(() => {
+    if (paramId) {
+        handleFriendClick(Number(paramId))
+    }
+}, [paramId])
 
   useEffect(() => {
     getUserFriends()

@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter,RouterProvider,Navigate } from 'react-router'
 import './index.css'
-import { Toaster } from 'react-hot-toast'  // Add this import
+import { Toaster } from 'react-hot-toast'
 import { LogIn } from './components/auth/LogIn'
 import { SignUp } from './components/auth/SignUp'
 import { Global } from './components/pages/Global'
@@ -12,7 +12,6 @@ import { Profile } from './components/pages/Profile'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import { GroupCreate } from './components/pages/GroupCreate'
 import { ProfileEdit } from './components/pages/ProfileEdit'
-import { FriendChat } from './components/pages/FriendChat'
 import { ChangePassword } from './components/pages/ChangePassword'
 import { GroupChat } from './components/pages/GroupChat'
 
@@ -39,7 +38,7 @@ export const router = createBrowserRouter([
   },
   {
     path:'/chats/:id',
-    element:<FriendChat/>
+    element:<Chats/>
   },
   {
     path:"/profile/:id",
