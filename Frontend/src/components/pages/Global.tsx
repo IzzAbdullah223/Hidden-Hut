@@ -18,7 +18,9 @@ const socket = socketIO(import.meta.env.VITE_API_URL)
 
 export function Global() {
 
- 
+  const token = localStorage.getItem('token')
+  console.log(token)
+  console.log(token)
   const currentUserId = Number(localStorage.getItem('currentUserId'))
   const [message, setMessage] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -49,7 +51,12 @@ export function Global() {
   }
 
   const HandleImageUpload = async () => {
-    fileInputRef.current?.click()
+    if(!token)
+
+      return
+
+    else
+      fileInputRef.current?.click()
   }
 
   const handleCancelImage = () => {
@@ -188,10 +195,12 @@ export function Global() {
                   to={`/profile/${user.id}`}
                   className="flex gap-3 items-center hover:bg-dark-200 p-2 rounded-md"
                 >
+                  <div className="relative flex-shrink-0"> 
                   <img
                     src={user.pictureURL}
-                    className="size-10 rounded-full object-cover object-center"
-                  />
+                    className="size-10 rounded-full object-cover object-center"/>
+                     <div className="absolute size-3 rounded-full bottom-0 right-0 bg-stale"></div>
+                  </div>
                   <div className="flex flex-col">
                     <p>{user.firstName} {user.lastName}</p>
                     <p className="text-xs text-dark-500">@{user.username}</p>
@@ -278,6 +287,7 @@ export function Global() {
                           <div className="flex flex-col gap-2 ">
                             {msg.content && (
                               <p className="bg-dark-200 py-2 px-4 rounded-2xl flex-shrink w-fit max-w-[22rem] text-wrap">{msg.content}</p>
+                              
                             )}
                             {msg.imageUrl && (
                               <img src={msg.imageUrl} className="max-w-[18rem] w-[90%] rounded-2xl" />
@@ -288,7 +298,7 @@ export function Global() {
                         <div className="flex gap-4">
                           <img className="size-8 sm:size-10 rounded-full self-end" src={msg.sender.pictureURL} />
                           <div className="flex flex-col gap-2">
-                            <p className="text-dark-500 text-xs ml-3">@{msg.sender.firstName}</p>
+                            <p className="text-dark-500 text-xs ml-3">@{msg.sender.username}</p>
                             <div className="flex flex-col gap-2 ">
                               {msg.content && (
                                 <p className="bg-dark-200  py-2 px-4 rounded-2xl w-fit">{msg.content}</p>
@@ -324,11 +334,14 @@ export function Global() {
             accept="image/*"
             onChange={handleFileSelect} />
           <form onSubmit={handleSubmit} className="flex items-center gap-2 p-2 bg-dark-100">
-            <textarea rows={1} value={message} onChange={handleMessageInput} className="resize-none w-full flex-1 shrink py-1.5 px-4 border border-gray-100/10 rounded-3xl" />
+            <textarea rows={1} value={message} onChange={handleMessageInput}
+             disabled={!token} className="resize-none w-full flex-1 shrink py-1.5 px-4 border border-gray-100/10 rounded-3xl"
+             placeholder={!token? "Login to send message":""}
+             />
             <div onClick={HandleImageUpload} className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full" >
               <img src={image} className="size-5 sm:size-8 " />
             </div>
-            <button disabled={isSubmitting || !(message.trim() || imagePreview)} type="submit" className="cursor-pointer p-1.5 border border-gray-100/10 rounded-full disabled:opacity-70">
+            <button disabled={isSubmitting || !(message.trim() || imagePreview) || token==null} type="submit" className={`p-1.5 border border-gray-100/10 rounded-full disabled:opacity-70 ${token? 'cursor-pointer':""}`}>
               <img src={send} className="size-5 sm:size-8" />
             </button>
           </form>

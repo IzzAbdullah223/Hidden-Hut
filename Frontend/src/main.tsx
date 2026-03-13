@@ -14,7 +14,7 @@ import { GroupCreate } from './components/pages/GroupCreate'
 import { ProfileEdit } from './components/pages/ProfileEdit'
 import { ChangePassword } from './components/pages/ChangePassword'
 import { GroupChat } from './components/pages/GroupChat'
-import { FriendChat } from './components/pages/FriendChat'
+ 
 
 export const router = createBrowserRouter([
   {
@@ -30,17 +30,21 @@ export const router = createBrowserRouter([
     element: <LogIn />,
   },
   {
-   path:"/global",
-   element:<Global />
+    path:"/global",
+    element:<Global />
   },
   {
     path:"/chats",
     element:<Chats />
   },
-{
-  path: '/chats/friend/:id',
-  element: <FriendChat />
-},
+  {
+    path: '/chats/user/:id',
+    element: <Chats />
+  },
+  {
+    path: '/chats/:id',
+    element: <Chats />
+  },
   {
     path:"/profile/:id",
     element:<Profile/>
@@ -65,19 +69,17 @@ export const router = createBrowserRouter([
     path:'/group/chats/:id',
     element:<GroupChat/>
   }
-
 ]);
 
 createRoot(document.getElementById('root')!).render(
- // <StrictMode>
-      <SkeletonTheme baseColor='#313131' highlightColor='#525252'> 
-  <Toaster 
+  <SkeletonTheme baseColor='#313131' highlightColor='#525252'> 
+    <Toaster 
       position="top-right"
       reverseOrder={false}
       toastOptions={{
         duration: 3000,
         style: {
-          background: '#242526',  // Match your dark theme
+          background: '#242526',
           color: '#fff',
           border: '1px solid #3a3b3c',
         },
@@ -99,7 +101,6 @@ createRoot(document.getElementById('root')!).render(
         },
       }}
     />
-      <RouterProvider router={router}/>
-      </SkeletonTheme>
-  //</StrictMode>,
+    <RouterProvider router={router}/>
+  </SkeletonTheme>
 )

@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form'
 type ActivePanel = 'profile' | 'edit' | 'password'
 
 export function Profile() {
+    const token = localStorage.getItem('token')
     const { id } = useParams()
     const navigate = useNavigate()
     const currentUserId = localStorage.getItem('currentUserId')
@@ -161,6 +162,7 @@ export function Profile() {
                                     <Link to={`/profile/change/password/${data?.id}`}><Button variant="secondary" className="text-base cursor-pointer">Change Password</Button></Link>
                                 </div>
                             ) : (
+                                
                                 <Link to={`/chats/${data?.id}`} className="flex gap-3 mt-5 w-fit">
                                     <Button variant="secondary" className="text-base cursor-pointer">Send Message</Button>
                                 </Link>
@@ -244,11 +246,12 @@ export function Profile() {
                                         <div className="flex justify-end gap-3 mt-5">
                                             <Button onClick={() => setActivePanel('edit')} variant="secondary" className="text-base cursor-pointer">Edit Profile</Button>
                                         </div>
-                                    ) : (
-                                        <Link to={`/chats/${data?.id}`} className="flex gap-3 mt-5 w-fit">
+                                    ) : token? (
+                                        
+                                        <Link to={`/chats/user/${data?.id}`} className="flex gap-3 mt-5 w-fit">
                                             <Button variant="secondary" className="text-base cursor-pointer">Send Message</Button>
                                         </Link>
-                                    )}
+                                    ):null}
                                 </div>
                             </>
                         )}

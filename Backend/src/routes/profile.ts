@@ -5,7 +5,7 @@ import { upload } from "../middleware/multer.js";
 
 export const profileRouter = Router()
 
-profileRouter.get('/profile/:id',verifyToken,getProfile)
+profileRouter.get('/profile/:id',getProfile)
 profileRouter.post('/profile/:id/picture',verifyToken,upload.single('image'),changeProfilePicture)
 profileRouter.post('/profile/banner',verifyToken,upload.single('image'),changeProfileBanner)
 profileRouter.post('/profile/edit/:id',editProfile)

@@ -67,6 +67,7 @@ export type Messages={
     senderId:number,
     imageUrl:string
     sender:{
+        username:string
         firstName:string,
         lastName:string,
         pictureURL:string,

@@ -9,7 +9,7 @@ import { upload } from "../middleware/multer.js";
 
 export const chatRouter = Router()
 
-chatRouter.get('/chats',verifyToken,getUsers)
+chatRouter.get('/chats',getUsers)
 chatRouter.get('/chats/friends',verifyToken,getUserFriends)
 chatRouter.get('/chats/friend/:id',verifyToken,getProfile)
 chatRouter.get(`/chats/:id/messages`,verifyToken,getDirectedMessages)
