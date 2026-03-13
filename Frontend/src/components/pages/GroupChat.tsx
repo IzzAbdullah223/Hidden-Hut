@@ -12,6 +12,8 @@ import { Link, useParams } from "react-router-dom"
 import { Sidebar } from "../Sidebar"
 import { type Messages, type Groups } from '../../lib/types'
 import { formatDate, isSameDay } from '@/lib/utils'
+import { io as socketIO } from 'socket.io-client'
+const socket = socketIO(import.meta.env.VITE_API_URL)
 
 export function GroupChat() {
   const currentUserId = Number(localStorage.getItem('currentUserId'))
@@ -86,7 +88,6 @@ export function GroupChat() {
     setMessage('')
     setImagePreview(undefined)
     setSelectedFile(null)
-    setRefreshTrigger(prev => prev + 1)
   }
 
   useEffect(() => {
@@ -105,6 +106,21 @@ export function GroupChat() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+useEffect(() => {
+  const roomId = `group_${id}`
+
+  socket.emit('join_room', roomId)
+   
+  socket.on('new_group_message', (newMessage: Messages) => {
+    setData(prev => [...prev, newMessage])
+  })
+
+  return () => {
+    socket.emit('leave_room', roomId)
+    socket.off('new_group_message')
+  }
+}, [id])
 
   useEffect(() => {
     fetchMessages()

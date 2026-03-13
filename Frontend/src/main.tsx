@@ -14,6 +14,7 @@ import { GroupCreate } from './components/pages/GroupCreate'
 import { ProfileEdit } from './components/pages/ProfileEdit'
 import { ChangePassword } from './components/pages/ChangePassword'
 import { GroupChat } from './components/pages/GroupChat'
+import { FriendChat } from './components/pages/FriendChat'
 
 export const router = createBrowserRouter([
   {
@@ -36,10 +37,10 @@ export const router = createBrowserRouter([
     path:"/chats",
     element:<Chats />
   },
-  {
-    path:'/chats/:id',
-    element:<Chats/>
-  },
+{
+  path: '/chats/friend/:id',
+  element: <FriendChat />
+},
   {
     path:"/profile/:id",
     element:<Profile/>

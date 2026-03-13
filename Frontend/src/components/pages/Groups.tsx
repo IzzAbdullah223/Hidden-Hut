@@ -18,7 +18,10 @@ import { Button } from "../ui/button"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { errorToast } from '@/lib/toastStyles'
-import { formatDate, isSameDay } from '@/lib/utils'   
+import { formatDate, isSameDay } from '@/lib/utils'
+import { io as socketIO } from 'socket.io-client'
+const socket = socketIO(import.meta.env.VITE_API_URL)
+
 
 type ActiveView = 'chat' | 'create'
 
@@ -147,7 +150,6 @@ export function Groups() {
         setMessage('')
         setImagePreview(undefined)
         setSelectedFile(null)
-        setRefreshTrigger(prev => prev + 1)
     }
 
     const handleGroupImageUpload = () => groupFileInputRef.current?.click()
@@ -215,6 +217,23 @@ export function Groups() {
         document.addEventListener('mousedown', handleClickOutside)
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
+
+useEffect(() => {
+  if (!selectedGroupId) return
+
+  const roomId = `group_${selectedGroupId}`
+
+  socket.emit('join_room', roomId)
+  socket.off('new_group_message')
+  socket.on('new_group_message', (newMessage: Messages) => {
+    setMessages(prev => [...prev, newMessage])
+  })
+
+  return () => {
+    socket.emit('leave_room', roomId)
+    socket.off('new_group_message')
+  }
+}, [selectedGroupId])
 
     return (
         <div className="flex flex-col sm:flex-row sm:gap-1 sm:p-1 sm:pb-2 md:p-3 md:gap-3 h-screen bg-dark">

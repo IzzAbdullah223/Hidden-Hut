@@ -154,12 +154,22 @@ export async function fetchGroupMessages(groupId:number){
 
  
 export async function postMessage(Id:number,message?:string,image?:string){
-    await prisma.message.create({
+  return  await prisma.message.create({
         data:{
             content:message ?? null,
             imageUrl:image ?? null,
             type:"GLOBAL",
             senderId:Id
+        },
+        include:{
+            sender:{
+                select:{
+                    username:true,
+                    firstName:true,
+                    lastName:true,
+                    pictureURL:true,
+                }
+            }
         }
     })
   
@@ -183,27 +193,37 @@ export async function postDirectedMessage(senderId:number,recipentId:number,mess
 
   
 
-  await prisma.message.create({
-    data:{
-        senderId:senderId,
-        recipentId:recipentId,
-        content:message ?? null,
-        imageUrl: image ?? null,
-        type:"DIRECTED"
+  return await prisma.message.create({   
+    data: {
+      senderId, recipentId,
+      content: message ?? null,
+      imageUrl: image ?? null,
+      type: "DIRECTED"
+    },
+    include: {
+      sender: {
+        select: { username: true, firstName: true, lastName: true, pictureURL: true }
+      }
     }
   })
+
+
 }
 
 export async function postGroupMessage(senderId:number,groupId:number,message?:string,image?:string){
-    await prisma.message.create({
-        data:{
-            senderId:senderId,
-            groupId:groupId,
-            content:message ?? null,
-            imageUrl:image ?? null,
-            type:"GROUP"
-        }
-    })
+  return await prisma.message.create({  // add return + include
+    data: {
+      senderId, groupId,
+      content: message ?? null,
+      imageUrl: image ?? null,
+      type: "GROUP"
+    },
+    include: {
+      sender: {
+        select: { username: true, firstName: true, lastName: true, pictureURL: true }
+      }
+    }
+  })
 }
 
 export async function deleteMessage(Id:number){

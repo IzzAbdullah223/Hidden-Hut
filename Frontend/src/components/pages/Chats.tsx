@@ -13,6 +13,8 @@ import { Link } from "react-router-dom"
 import 'react-loading-skeleton/dist/skeleton.css'
 import { formatDate, isSameDay } from '@/lib/utils'   
 import { useParams } from "react-router-dom"
+import { io as socketIO } from 'socket.io-client'
+const socket = socketIO(import.meta.env.VITE_API_URL)
 
 export function Chats() {
   const { id: paramId } = useParams()
@@ -131,7 +133,6 @@ export function Chats() {
     setMessage('')
     setImagePreview(undefined)
     setSelectedFile(null)
-    setRefreshTrigger(prev => prev + 1)
   }
 
   useEffect(() => {
@@ -167,6 +168,23 @@ useEffect(() => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+useEffect(() => {
+  if (!selectedFriendId) return
+
+  const roomId = `chat_${Math.min(currentUserId, selectedFriendId)}_${Math.max(currentUserId, selectedFriendId)}`
+
+  socket.emit('join_room', roomId)
+  socket.off('new_directed_message')
+  socket.on('new_directed_message', (newMessage: Messages) => {
+    setMessages(prev => [...prev, newMessage])
+  })
+
+  return () => {
+    socket.emit('leave_room', roomId)
+    socket.off('new_directed_message')
+  }
+}, [selectedFriendId])
 
   return (
     <div className="flex flex-col sm:flex-row sm:gap-1 sm:p-1 sm:pb-2 md:p-3 md:gap-3 h-screen bg-dark">
@@ -229,7 +247,7 @@ useEffect(() => {
                     userFriends.map((friend) => (
                       <div key={friend.id}>
                         <Link
-                          to={`/chats/${friend.id}`}
+                          to={`/chats/friend/${friend.id}`}
                           className="flex sm:hidden gap-2 p-2 rounded-md transition hover:bg-dark-200"
                         >
                           <img className="size-10 rounded-full" src={friend.pictureURL} />

@@ -1,6 +1,7 @@
 import e, {type Request, type Response} from 'express'
 import * as db from '../db/queries.js'
 import cloudinary from '../config/cloudinary.js'
+import { io } from '../app.js'
  
  
 
@@ -51,8 +52,10 @@ export async function postMessage(req: Request, res: Response) {
       imageUrl = cloudinaryResult.secure_url
     }
 
+    const newMessage = await db.postMessage(senderId,message,imageUrl)
+    io.emit('new_global_message',newMessage)
  
-    await db.postMessage(senderId, message, imageUrl)
+ 
     
     return res.status(201).json({
       success: true
@@ -113,8 +116,9 @@ export async function postDirectedMessage(req:Request,res:Response){
       imageUrl = cloudinaryResult.secure_url
     }
 
- 
-    await db.postDirectedMessage(senderId,recipentId, message, imageUrl)
+    const newMessage = await db.postDirectedMessage(senderId, recipentId, message, imageUrl)
+    const roomId = `chat_${Math.min(senderId, recipentId)}_${Math.max(senderId, recipentId)}`
+    io.to(roomId).emit('new_directed_message', newMessage)
     
     return res.status(201).json({
       success: true
@@ -152,6 +156,8 @@ export async function getGroupMessages(req:Request,res:Response){
 }
 
 export async function postGroupMessages(req:Request,res:Response){
+
+  
     
   if (!req.user) {
     return res.status(401).json({
@@ -183,9 +189,11 @@ export async function postGroupMessages(req:Request,res:Response){
       imageUrl = cloudinaryResult.secure_url
     }
 
- 
-    await db.postGroupMessage(senderId,groupId, message, imageUrl)
-    
+    console.log('emitting to room:', `group_${groupId}`)
+
+      const newMessage = await db.postGroupMessage(senderId, groupId, message, imageUrl)
+      io.to(`group_${groupId}`).emit('new_group_message', newMessage)
+
     return res.status(201).json({
       success: true
     })

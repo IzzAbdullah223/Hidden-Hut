@@ -12,6 +12,8 @@ import { Link, useParams } from "react-router-dom"
 import { Sidebar } from "../Sidebar"
 import { type Messages, type User } from '../../lib/types'
 import { formatDate, isSameDay } from '@/lib/utils'
+import { io as socketIO } from 'socket.io-client'
+const socket = socketIO(import.meta.env.VITE_API_URL)
 
 export function FriendChat() {
 
@@ -88,7 +90,6 @@ export function FriendChat() {
     setMessage('')
     setimagePreview(undefined)
     setSelectedFile(null)
-    setRefreshTrigger(prev => prev + 1)
   }
 
   useEffect(() => {
@@ -115,6 +116,22 @@ export function FriendChat() {
   useEffect(() => {
     Messages()
   }, [refreshTrigger])
+
+useEffect(() => {
+  const roomId = `chat_${Math.min(currentUserId, Number(id))}_${Math.max(currentUserId, Number(id))}`
+   
+  
+  socket.emit('join_room', roomId) // join the room
+
+  socket.on('new_directed_message', (newMessage: Messages) => {
+    setData(prev => [...prev, newMessage])
+  })
+
+  return () => {
+    socket.emit('leave_room', roomId)  
+    socket.off('new_directed_message')
+  }
+}, [id])
 
 
 

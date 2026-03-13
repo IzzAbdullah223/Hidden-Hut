@@ -12,6 +12,9 @@ import { Sidebar } from "../Sidebar"
 import { type Messages, type User } from '../../lib/types'
 import { Link } from "react-router-dom"
 import { formatDate, isSameDay } from '@/lib/utils'
+ 
+import { io as socketIO } from 'socket.io-client'
+const socket = socketIO(import.meta.env.VITE_API_URL)  
 
 export function Global() {
 
@@ -83,7 +86,6 @@ export function Global() {
     setMessage('')
     setimagePreview(undefined)
     setSelectedFile(null)
-    setRefreshTrigger(prev => prev + 1)
   }
 
   const getUsers = async () => {
@@ -118,11 +120,18 @@ export function Global() {
 
   useEffect(() => {
     Messages()
- 
   }, [refreshTrigger ])
 
     useEffect(()=>{
     getUsers()
+  },[])
+
+  useEffect(()=>{
+    socket.on('new_global_message',(newMessage:Messages)=>{
+      setData(prev=>[...prev,newMessage])
+    })
+
+    return ()=>{socket.off('new_global_message')}
   },[])
 
 
