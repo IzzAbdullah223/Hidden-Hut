@@ -1,10 +1,10 @@
 import {type TeditProfileSchema, type TchangePasswordSchema} from '../lib/types'
 
- const token = localStorage.getItem('token')
+ 
  
 
 export async function fetchUsers(){
-    
+     const token = localStorage.getItem('token')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/chats`,{
         method:'GET',
         headers:{
@@ -17,7 +17,7 @@ export async function fetchUsers(){
 }
 
 export async function fetchUser(userId:number ){
-
+     const token = localStorage.getItem('token')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/${userId}`,{
         method:"GET",
         headers:{
@@ -30,6 +30,7 @@ export async function fetchUser(userId:number ){
 }
 
 export async function editProfile(data:TeditProfileSchema,userId:string | undefined){
+     const token = localStorage.getItem('token')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/edit/${userId}`,{
         method:'POST',
         headers:{
@@ -52,7 +53,7 @@ export async function editProfile(data:TeditProfileSchema,userId:string | undefi
 }
 
 export async function changeProfilePicture(formData:FormData){
- 
+     const token = localStorage.getItem('token')
     const userId = formData.get('userId')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/${userId}/picture`,{
         method:'POST',
@@ -67,7 +68,7 @@ export async function changeProfilePicture(formData:FormData){
 }
 
 export async function passwordChange(formData:TchangePasswordSchema){
-
+       const token = localStorage.getItem('token')
  
       const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/change/password`,{
         method:'POST',
@@ -88,6 +89,7 @@ export async function passwordChange(formData:TchangePasswordSchema){
 }
 
 export async function changeProfileBanner(formData:FormData){
+     const token = localStorage.getItem('token')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/banner`,{
         method:'POST',
         headers:{
@@ -100,6 +102,7 @@ export async function changeProfileBanner(formData:FormData){
 }
 
 export async function getFriend(friendId:number){
+     const token = localStorage.getItem('token')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/friend/${friendId}`,{
         method:'GET',
         headers:{
@@ -111,6 +114,7 @@ export async function getFriend(friendId:number){
 }
 
 export async function getFriends(){
+     const token = localStorage.getItem('token')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/friends`,{
         method:'GET',
         headers:{

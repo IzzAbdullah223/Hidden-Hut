@@ -19,8 +19,7 @@ const socket = socketIO(import.meta.env.VITE_API_URL)
 export function Global() {
 
   const token = localStorage.getItem('token')
-  console.log(token)
-  console.log(token)
+ 
   const currentUserId = Number(localStorage.getItem('currentUserId'))
   const [message, setMessage] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -46,7 +45,7 @@ export function Global() {
 
   const handleDelete = async (messageId: number) => {
     const response = await deleteMessage(messageId)
-    console.log(response)
+ 
     setRefreshTrigger(prev => prev + 1)
   }
 
@@ -97,12 +96,12 @@ export function Global() {
 
   const getUsers = async () => {
     setLoadingUsers(true)
-    console.log("get users")
+ 
     const response = await fetchUsers()
-    console.log(response)
+ 
     if (response.status === 200) {
       const responseData = await response.json()
-      console.log(responseData)
+ 
       setUsers(responseData)
     }
     setLoadingUsers(false)
