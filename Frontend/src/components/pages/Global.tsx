@@ -27,7 +27,6 @@ export function Global() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [data, setData] = useState<Messages[]>([])
   const [showDeleteId, setShowDeleteId] = useState<number | null>(null)
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [Loading, setLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -45,8 +44,10 @@ export function Global() {
 
   const handleDelete = async (messageId: number) => {
     const response = await deleteMessage(messageId)
- 
-    setRefreshTrigger(prev => prev + 1)
+    if (response.status === 200) {
+      setData(prev => prev.filter(msg => msg.id !== messageId))
+    setShowDeleteId(null)
+  }
   }
 
   const HandleImageUpload = async () => {
@@ -126,7 +127,7 @@ export function Global() {
 
   useEffect(() => {
     Messages()
-  }, [refreshTrigger ])
+  }, [])
 
     useEffect(()=>{
     getUsers()

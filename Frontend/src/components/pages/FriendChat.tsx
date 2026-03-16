@@ -26,7 +26,6 @@ export function FriendChat() {
   const [data, setData] = useState<Messages[]>([])
   const [friend, setFriend] = useState<User>()
   const [showDeleteId, setShowDeleteId] = useState<number | null>(null)
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [Loading, setLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -48,8 +47,10 @@ export function FriendChat() {
 
   const handleDelete = async (messageId: number) => {
     const response = await deleteMessage(messageId)
-    console.log(response)
-    setRefreshTrigger(prev => prev + 1)
+  if (response.status === 200) {
+    setData(prev => prev.filter(msg => msg.id !== messageId))
+    setShowDeleteId(null)
+  }
   }
 
   const HandleImageUpload = async () => {
@@ -115,13 +116,13 @@ export function FriendChat() {
 
   useEffect(() => {
     Messages()
-  }, [refreshTrigger])
+  }, [])
 
 useEffect(() => {
   const roomId = `chat_${Math.min(currentUserId, Number(id))}_${Math.max(currentUserId, Number(id))}`
    
   
-  socket.emit('join_room', roomId) // join the room
+  socket.emit('join_room', roomId)  
 
   socket.on('new_directed_message', (newMessage: Messages) => {
     setData(prev => [...prev, newMessage])

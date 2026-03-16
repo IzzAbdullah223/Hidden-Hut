@@ -25,7 +25,6 @@ export function GroupChat() {
   const [data, setData] = useState<Messages[]>([])
   const [group, setGroup] = useState<Groups>()
   const [showDeleteId, setShowDeleteId] = useState<number | null>(null)
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [Loading, setLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -47,8 +46,10 @@ export function GroupChat() {
 
   const handleDelete = async (messageId: number) => {
     const response = await deleteMessage(messageId)
-    console.log(response)
-    setRefreshTrigger(prev => prev + 1)
+  if (response.status === 200) {
+    setData(prev => prev.filter(msg => msg.id !== messageId))
+    setShowDeleteId(null)
+  }
   }
 
   const HandleImageUpload = async () => {
@@ -124,7 +125,7 @@ useEffect(() => {
 
   useEffect(() => {
     fetchMessages()
-  }, [refreshTrigger])
+  }, [])
 
   async function fetchMessages() {
     setLoading(true)
