@@ -1,11 +1,20 @@
 # Messenger App
-
 A full-stack messenger application designed to provide seamless communication.
 
-## Features
-
+## Preview
 ---
 
+### Signup Page
+![Signup Page](docs/signupPage.PNG)
+
+### Global Chat
+![Global Chat](docs/globalChat.PNG)
+
+### User Profile
+![User Profile](docs/profilePage.PNG)
+
+## Features
+---
 - User authentication (Log in & Sign up)
 - Send and manage text messages
 - Image sharing capabilities
@@ -15,11 +24,8 @@ A full-stack messenger application designed to provide seamless communication.
 - Comprehensive account management
 
 ## Technologies Used
-
 ---
-
 ### Frontend
-
 - TypeScript
 - React
 - Tailwind
@@ -28,7 +34,6 @@ A full-stack messenger application designed to provide seamless communication.
 - Vercel
 
 ### Backend
-
 - Express
 - Nodejs
 - PostgreSQL
@@ -38,11 +43,8 @@ A full-stack messenger application designed to provide seamless communication.
 - Neon
 
 ## Libraries Used
-
 ---
-
 ### Frontend
-
 - [react-hook-form](https://react-hook-form.com) – Simplifies form states, errors, and validations.
 - [react-router-dom](https://reactrouter.com) – Contains bindings for using React Router in web applications.
 - [zod](https://zod.dev) – Schema validation for forms.
@@ -50,9 +52,7 @@ A full-stack messenger application designed to provide seamless communication.
 - [date-fns](https://date-fns.org) – Provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates.
 - [react-hot-toast](https://react-hot-toast.com) – Lightweight notification library for displaying success and error messages.
 
-
 ### Backend
-
 - [PassportJS](https://www.passportjs.org) – Authentication middleware for Express.
 - [bcryptjs](https://github.com/dcodeIO/bcrypt.js) – For securing passwords by hashing and salting.
 - [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) – A proposed Internet standard for creating data with optional signature and/or optional encryption.

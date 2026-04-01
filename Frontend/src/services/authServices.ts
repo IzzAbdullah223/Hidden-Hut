@@ -29,9 +29,4 @@ export async function logIn(data:TLogInSchema){
         })
     })
     return response;
-   
- 
-
-    
- 
 }
